@@ -7,7 +7,6 @@ import nodemailer from "nodemailer";
 
 const prisma = new PrismaClient();
 
-// Configure Nodemailer transporter with Gmail
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -37,11 +36,15 @@ export async function registerUser(formData: FormData) {
         const hashedPassword = await bcrypt.hash(password, 10);
         const token = crypto.randomBytes(32).toString("hex");
 
+        const baseUsername = email.split("@")[0];
+        const username = `${baseUsername}_${Math.floor(1000 + Math.random() * 9000)}`;
+
         await prisma.user.create({
             data: {
-                name,
+                displayName: name,
                 email,
-                passwordHash: hashedPassword,
+                username,
+                password: hashedPassword,
                 verificationToken: token,
                 emailVerified: null,
             },
@@ -50,7 +53,6 @@ export async function registerUser(formData: FormData) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
         const verificationLink = `${appUrl}/api/verify?token=${token}&email=${encodeURIComponent(email)}`;
 
-        // Send email via Gmail SMTP
         await transporter.sendMail({
             from: `"Bloggy" <${process.env.GMAIL_USER}>`,
             to: email,

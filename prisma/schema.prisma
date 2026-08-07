@@ -33,19 +33,22 @@ enum PostType {
 }
 
 model User {
-  id               String           @id @default(cuid())
-  email            String           @unique
-  username         String           @unique
-  displayName      String
-  avatar           String?
-  coverBanner      String?
-  bio              String?
-  verification     VerificationTier @default(GRAY)
-  level            CreatorLevel     @default(EXPLORER)
-  xpPoints         Int              @default(1250)
-  readingStreak    Int              @default(12)
-  articlesRead     Int              @default(48)
-  balance          Float            @default(551.44)
+  id                String           @id @default(cuid())
+  email             String           @unique
+  username          String           @unique
+  displayName       String
+  password          String?
+  emailVerified     Boolean          @default(false)
+  verificationToken String?          @unique
+  avatar            String?
+  coverBanner       String?
+  bio               String?
+  verification      VerificationTier @default(GRAY)
+  level             CreatorLevel     @default(EXPLORER)
+  xpPoints          Int              @default(1250)
+  readingStreak     Int              @default(12)
+  articlesRead      Int              @default(48)
+  balance           Float            @default(551.44)
   
   // Preferences & Onboarding
   selectedInterests String[]
@@ -66,23 +69,23 @@ model User {
 }
 
 model Post {
-  id             String     @id @default(cuid())
-  authorId       String
-  author         User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  title          String?
-  content        String
-  postType       PostType   @default(POST)
-  category       String     @default("General")
-  topicTags      String[]
-  imageUrl       String?
-  views          Int        @default(0)
-  likes          Int        @default(0)
-  readingTime    Int        @default(3)
-  isSaved        Boolean    @default(false)
-  isTrending     Boolean    @default(false)
+  id          String   @id @default(cuid())
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title       String?
+  content     String
+  postType    PostType @default(POST)
+  category    String   @default("General")
+  topicTags   String[]
+  imageUrl    String?
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  readingTime Int      @default(3)
+  isSaved     Boolean  @default(false)
+  isTrending  Boolean  @default(false)
 
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Collection {
@@ -106,24 +109,24 @@ model Achievement {
 }
 
 model UserChallenge {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title       String
-  progress    Int      @default(0)
-  target      Int      @default(100)
-  completed   Boolean  @default(false)
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  progress  Int      @default(0)
+  target    Int      @default(100)
+  completed Boolean  @default(false)
 }
 
 model Message {
-  id          String   @id @default(cuid())
-  senderId    String
-  sender      User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  receiverId  String
-  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
-  content     String
-  read        Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  senderId   String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
 }
 
 model Notification {

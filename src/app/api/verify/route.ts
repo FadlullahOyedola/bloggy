@@ -13,7 +13,6 @@ export async function GET(request: Request) {
     }
 
     try {
-        // Find the user matching the email and verification token
         const user = await prisma.user.findUnique({
             where: { email },
         });
@@ -22,7 +21,6 @@ export async function GET(request: Request) {
             return NextResponse.json({ error: "Invalid or expired verification token." }, { status: 400 });
         }
 
-        // Update user to mark them as verified and clear the token
         await prisma.user.update({
             where: { email },
             data: {
@@ -31,7 +29,6 @@ export async function GET(request: Request) {
             },
         });
 
-        // Redirect user to login page with a success message
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
         return NextResponse.redirect(`${appUrl}/login?verified=true`);
     } catch (err) {
