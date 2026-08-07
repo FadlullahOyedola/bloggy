@@ -1,0 +1,30 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js Build & Cache Output
+/.next/
+/out/
+/build
+
+# Environment Variables (CRITICAL FOR NEON DB & KEYS)
+.env
+.env*.local
+.env.production
+.env.development
+
+# Testing & Coverage
+/coverage
+
+# Debug Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System & IDE Files
+.DS_Store
+*.pem
+.vscode/
+.idea/

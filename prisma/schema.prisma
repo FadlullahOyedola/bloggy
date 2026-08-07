@@ -1,0 +1,137 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum VerificationTier {
+  GRAY
+  BLUE
+  PURPLE
+  GOLD
+}
+
+enum CreatorLevel {
+  EXPLORER
+  CONTRIBUTOR
+  WRITER
+  CREATOR
+  INFLUENCER
+  TOP_CREATOR
+  EDITORIAL_PARTNER
+  LEGEND
+}
+
+enum PostType {
+  ARTICLE
+  POST
+  STORY
+  DRAFT
+}
+
+model User {
+  id               String           @id @default(cuid())
+  email            String           @unique
+  username         String           @unique
+  displayName      String
+  avatar           String?
+  coverBanner      String?
+  bio              String?
+  verification     VerificationTier @default(GRAY)
+  level            CreatorLevel     @default(EXPLORER)
+  xpPoints         Int              @default(1250)
+  readingStreak    Int              @default(12)
+  articlesRead     Int              @default(48)
+  balance          Float            @default(551.44)
+  
+  // Preferences & Onboarding
+  selectedInterests String[]
+  selectedTopics    String[]
+  followedAuthorIds String[]
+
+  // Relations
+  posts            Post[]
+  collections      Collection[]
+  achievements     Achievement[]
+  notifications    Notification[]
+  messagesSent     Message[]        @relation("SentMessages")
+  messagesReceived Message[]        @relation("ReceivedMessages")
+  userChallenges   UserChallenge[]
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model Post {
+  id             String     @id @default(cuid())
+  authorId       String
+  author         User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title          String?
+  content        String
+  postType       PostType   @default(POST)
+  category       String     @default("General")
+  topicTags      String[]
+  imageUrl       String?
+  views          Int        @default(0)
+  likes          Int        @default(0)
+  readingTime    Int        @default(3)
+  isSaved        Boolean    @default(false)
+  isTrending     Boolean    @default(false)
+
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model Collection {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  itemCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  badgeIcon   String
+  unlockedAt  DateTime @default(now())
+}
+
+model UserChallenge {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  progress    Int      @default(0)
+  target      Int      @default(100)
+  completed   Boolean  @default(false)
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId  String
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content     String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
