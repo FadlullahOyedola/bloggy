@@ -6,8 +6,11 @@ import {
   Search, Bell, Moon, Sun, PenLine, PlayCircle, ArrowRight,
   ChevronDown, ChevronLeft, ChevronRight, Check, Cpu,
   TrendingUp, DollarSign, ShieldCheck, Headphones, BarChart3,
-  WifiOff, Mic, Smartphone, Tablet, Play, X
+  WifiOff, Mic, Smartphone, Tablet, Play, FileText, Calendar as CalendarIcon,
+  Sparkles, Layers
 } from 'lucide-react';
+import { AuroraBackground } from '@/components/ui/aurora-background';
+import { ButtonBorder } from '@/components/ui/button-border';
 
 export default function HomePage() {
   // --- States ---
@@ -684,12 +687,12 @@ export default function HomePage() {
       {announcementVisible && (
         <div id="announcement">
           ✨ Bloggy 3.0 is here — AI writing tools, voice articles & collaborative spaces.
-          <Link href="#">Explore what's new →</Link>
+          <Link href="/discover">Explore what's new →</Link>
           <span className="close-btn" onClick={() => setAnnouncementVisible(false)}>✕</span>
         </div>
       )}
 
-      {/* ── NAVBAR ── */}
+      {/* ── NAVBAR (With 9 Primary Destinations) ── */}
       <nav id="navbar" className={isScrolled ? 'scrolled' : ''}>
         <div className="container">
           <div className="nav-inner">
@@ -699,12 +702,13 @@ export default function HomePage() {
             </Link>
 
             <div className="nav-links nav-links-desktop">
+              <Link href="/discover">Discover</Link>
+              <Link href="/topics">Topics</Link>
+              <Link href="/authors">Authors</Link>
+              <Link href="/collections">Collections</Link>
+              <Link href="/community">Community</Link>
               <Link href="#trending">Trending</Link>
-              <Link href="#topics">Topics</Link>
-              <Link href="#editors">Editor's Picks</Link>
-              <Link href="#authors">Authors</Link>
               <Link href="#podcasts">Podcasts</Link>
-              <Link href="#newsletter" style={{ color: 'var(--purple-700)', fontWeight: 600 }}>Write →</Link>
             </div>
 
             <div className="nav-actions">
@@ -717,7 +721,12 @@ export default function HomePage() {
               <button className="nav-icon-btn" onClick={() => setIsDarkMode(!isDarkMode)} title="Dark mode">
                 {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
               </button>
-              <div className="nav-avatar" title="Profile"></div>
+              <Link href="/login" className="nav-links nav-links-desktop" style={{ fontSize: '14px', fontWeight: 600, color: 'var(--gray-700)', textDecoration: 'none', padding: '0 8px' }}>
+                Login
+              </Link>
+              <Link href="/register" className="btn btn-primary btn-sm">
+                Register
+              </Link>
               <button className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 <span></span><span></span><span></span>
               </button>
@@ -732,12 +741,14 @@ export default function HomePage() {
             background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(20px)', padding: '16px 20px',
             gap: '8px', borderBottom: '1px solid rgba(109,40,217,0.1)', zIndex: 99
           }}>
-            <Link href="#trending" onClick={() => setMobileMenuOpen(false)}>Trending</Link>
-            <Link href="#topics" onClick={() => setMobileMenuOpen(false)}>Topics</Link>
-            <Link href="#editors" onClick={() => setMobileMenuOpen(false)}>Editor's Picks</Link>
-            <Link href="#authors" onClick={() => setMobileMenuOpen(false)}>Authors</Link>
-            <Link href="#podcasts" onClick={() => setMobileMenuOpen(false)}>Podcasts</Link>
-            <Link href="#newsletter" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--purple-700)', fontWeight: 600 }}>Write →</Link>
+            <Link href="/discover" onClick={() => setMobileMenuOpen(false)}>Discover</Link>
+            <Link href="/topics" onClick={() => setMobileMenuOpen(false)}>Topics</Link>
+            <Link href="/authors" onClick={() => setMobileMenuOpen(false)}>Authors</Link>
+            <Link href="/collections" onClick={() => setMobileMenuOpen(false)}>Collections</Link>
+            <Link href="/community" onClick={() => setMobileMenuOpen(false)}>Community</Link>
+            <Link href="/search" onClick={() => setMobileMenuOpen(false)}>Search</Link>
+            <Link href="/login" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+            <Link href="/register" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--purple-700)', fontWeight: 600 }}>Register Free →</Link>
           </div>
         )}
       </nav>
@@ -800,81 +811,136 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ── HERO ── */}
-      <section id="hero">
-        <div className="hero-slides">
-          {slides.map((url, idx) => (
-            <div
-              key={idx}
-              className={`hero-slide ${idx === currentSlide ? 'active' : ''}`}
-              style={{ backgroundImage: `url('${url}')` }}
-            />
-          ))}
-        </div>
+      {/* ── HERO SECTION (WITH AURORA BACKGROUND & ANIMATED BUTTON) ── */}
+      <AuroraBackground className="min-h-[90vh]">
+        <section id="hero" style={{ background: 'transparent' }}>
+          <div className="hero-slides">
+            {slides.map((url, idx) => (
+              <div
+                key={idx}
+                className={`hero-slide ${idx === currentSlide ? 'active' : ''}`}
+                style={{ backgroundImage: `url('${url}')` }}
+              />
+            ))}
+          </div>
 
-        <div className="hero-badge b1">
-          <span className="badge-num">2.4M</span>
-          <span className="badge-label">Monthly Readers</span>
-        </div>
-        <div className="hero-badge b2">
-          <span className="badge-num">#1</span>
-          <span className="badge-label">AI Publishing Platform</span>
-        </div>
+          <div className="hero-badge b1">
+            <span className="badge-num">2.4M</span>
+            <span className="badge-label">Monthly Readers</span>
+          </div>
+          <div className="hero-badge b2">
+            <span className="badge-num">#1</span>
+            <span className="badge-label">AI Publishing Platform</span>
+          </div>
 
-        <div className="slide-nav">
-          {slides.map((_, idx) => (
-            <div
-              key={idx}
-              className={`slide-dot ${idx === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(idx)}
-            />
-          ))}
-        </div>
+          <div className="slide-nav">
+            {slides.map((_, idx) => (
+              <div
+                key={idx}
+                className={`slide-dot ${idx === currentSlide ? 'active' : ''}`}
+                onClick={() => setCurrentSlide(idx)}
+              />
+            ))}
+          </div>
 
-        <div className="hero-content">
-          <div className="container">
-            <div className="hero-inner">
-              <div className="hero-kicker">
-                <span className="live-dot"></span>
-                <span className="hero-category">Featured Story</span>
-                <span className="tag tag-white" style={{ marginLeft: '4px' }}>⚡ Trending Now</span>
+          <div className="hero-content">
+            <div className="container">
+              <div className="hero-inner">
+                <div className="hero-kicker">
+                  <span className="live-dot"></span>
+                  <span className="hero-category">Featured Story</span>
+                  <span className="tag tag-white" style={{ marginLeft: '4px' }}>⚡ Trending Now</span>
+                </div>
+                <h1 className="hero-headline">
+                  The Future of Writing<br />Is Intelligent, Personal<br />and Beautifully Human.
+                </h1>
+                <p className="hero-deck">
+                  Bloggy combines AI-powered publishing with editorial excellence.
+                  Reach millions of readers, grow your voice, and turn your ideas into impact.
+                </p>
+                <div className="hero-actions">
+                  <Link href="/register" className="btn btn-primary">
+                    <PenLine size={16} />
+                    Start Writing Free
+                  </Link>
+                  <ButtonBorder onClick={() => setSearchModalOpen(true)}>
+                    <Search size={16} />
+                    Quick Search (Ctrl + K)
+                  </ButtonBorder>
+                </div>
+                <div className="hero-meta">
+                  <div className="hero-author">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format" alt="Editor" />
+                    <div>
+                      <div className="hero-author-name">Ava Sinclair</div>
+                      <div className="hero-author-role">Editor in Chief · Bloggy</div>
+                    </div>
+                  </div>
+                  <div className="hero-stats">
+                    <div className="hero-stat">
+                      <div className="hero-stat-num">8 min</div>
+                      <div className="hero-stat-label">Read</div>
+                    </div>
+                    <div className="hero-stat">
+                      <div className="hero-stat-num">12.4K</div>
+                      <div className="hero-stat-label">Claps</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h1 className="hero-headline">
-                The Future of Writing<br />Is Intelligent, Personal<br />and Beautifully Human.
-              </h1>
-              <p className="hero-deck">
-                Bloggy combines AI-powered publishing with editorial excellence.
-                Reach millions of readers, grow your voice, and turn your ideas into impact.
+            </div>
+          </div>
+        </section>
+      </AuroraBackground>
+
+      {/* ── BENTO GRID SECTION ── */}
+      <section className="py-20 bg-slate-50 border-y border-slate-100">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-label">✦ Core Ecosystem</span>
+            <h2 className="section-title">Engineered for Creative Speed</h2>
+            <p className="section-subtitle">A unified platform combining autosaving Markdown, live notifications, scheduled calendars, and integrated feeds.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="md:col-span-1 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-4 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                <FileText size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">Automatic Draft Sync</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Every stroke is stored safely in real-time. Pick up writing from phone, tablet, or desktop without losing momentum.
               </p>
-              <div className="hero-actions">
-                <Link href="#newsletter" className="btn btn-primary">
-                  <PenLine size={16} />
-                  Start Writing Free
-                </Link>
-                <Link href="#trending" className="btn btn-ghost">
-                  <PlayCircle size={16} />
-                  Explore Stories
-                </Link>
+            </div>
+
+            <div className="md:col-span-2 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-4 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                <Bell size={24} />
               </div>
-              <div className="hero-meta">
-                <div className="hero-author">
-                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format" alt="Editor" />
-                  <div>
-                    <div className="hero-author-name">Ava Sinclair</div>
-                    <div className="hero-author-role">Editor in Chief · Bloggy</div>
-                  </div>
-                </div>
-                <div className="hero-stats">
-                  <div className="hero-stat">
-                    <div className="hero-stat-num">8 min</div>
-                    <div className="hero-stat-label">Read</div>
-                  </div>
-                  <div className="hero-stat">
-                    <div className="hero-stat-num">12.4K</div>
-                    <div className="hero-stat-label">Claps</div>
-                  </div>
-                </div>
+              <h3 className="text-xl font-bold text-slate-900">Direct Reader Notifications</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Bypass social algorithms. Your latest publications land straight in subscriber email digests and instant push feeds.
+              </p>
+            </div>
+
+            <div className="md:col-span-2 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-4 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                <Layers size={24} />
               </div>
+              <h3 className="text-xl font-bold text-slate-900">100+ Platform Integrations</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Sync content automatically with RSS feeds, custom DNS, podcast audio hosts, and community channels without custom code.
+              </p>
+            </div>
+
+            <div className="md:col-span-1 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-4 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                <CalendarIcon size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">Content Schedule</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Organize article launches and automated series with an intuitive editorial calendar.
+              </p>
             </div>
           </div>
         </div>
@@ -966,7 +1032,7 @@ export default function HomePage() {
             </div>
           </div>
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <Link href="#" className="btn btn-outline">
+            <Link href="/discover" className="btn btn-outline">
               View All Trending Stories <ArrowRight size={16} />
             </Link>
           </div>
@@ -1059,7 +1125,7 @@ export default function HomePage() {
                 </div>
               ))}
               <div style={{ textAlign: 'center', marginTop: '8px' }}>
-                <Link href="#" className="btn btn-outline btn-sm">See all picks</Link>
+                <Link href="/discover" className="btn btn-outline btn-sm">See all picks</Link>
               </div>
             </div>
           </div>
@@ -1191,7 +1257,7 @@ export default function HomePage() {
             </div>
           </div>
           <div style={{ textAlign: 'center', marginTop: '48px' }}>
-            <Link href="#" className="btn btn-primary">
+            <Link href="/discover" className="btn btn-primary">
               Load More Stories <ChevronDown size={16} />
             </Link>
           </div>
@@ -1332,7 +1398,7 @@ export default function HomePage() {
             })}
           </div>
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <Link href="#" className="btn btn-outline">Discover All Authors <ArrowRight size={16} /></Link>
+            <Link href="/authors" className="btn btn-outline">Discover All Authors <ArrowRight size={16} /></Link>
           </div>
         </div>
       </section>
@@ -1649,47 +1715,47 @@ export default function HomePage() {
             <div>
               <div className="footer-col-title">Platform</div>
               <ul className="footer-links">
-                <li><Link href="#">Explore Stories</Link></li>
-                <li><Link href="#">Browse Topics</Link></li>
-                <li><Link href="#">Trending Now</Link></li>
-                <li><Link href="#">Collections</Link></li>
-                <li><Link href="#">Podcasts</Link></li>
-                <li><Link href="#">Newsletter</Link></li>
+                <li><Link href="/discover">Explore Stories</Link></li>
+                <li><Link href="/topics">Browse Topics</Link></li>
+                <li><Link href="#trending">Trending Now</Link></li>
+                <li><Link href="/collections">Collections</Link></li>
+                <li><Link href="#podcasts">Podcasts</Link></li>
+                <li><Link href="#newsletter">Newsletter</Link></li>
               </ul>
             </div>
 
             <div>
               <div className="footer-col-title">For Writers</div>
               <ul className="footer-links">
-                <li><Link href="#">Start Writing</Link></li>
-                <li><Link href="#">AI Tools</Link></li>
-                <li><Link href="#">Monetization</Link></li>
-                <li><Link href="#">Analytics</Link></li>
-                <li><Link href="#">Partner Program</Link></li>
-                <li><Link href="#">Style Guide</Link></li>
+                <li><Link href="/register">Start Writing</Link></li>
+                <li><Link href="#why">AI Tools</Link></li>
+                <li><Link href="#why">Monetization</Link></li>
+                <li><Link href="#why">Analytics</Link></li>
+                <li><Link href="/community">Partner Program</Link></li>
+                <li><Link href="/community">Style Guide</Link></li>
               </ul>
             </div>
 
             <div>
               <div className="footer-col-title">Company</div>
               <ul className="footer-links">
-                <li><Link href="#">About Us</Link></li>
-                <li><Link href="#">Editorial Team</Link></li>
-                <li><Link href="#">Careers</Link></li>
-                <li><Link href="#">Press Kit</Link></li>
-                <li><Link href="#">Investors</Link></li>
-                <li><Link href="#">Blog</Link></li>
+                <li><Link href="/about">About Us</Link></li>
+                <li><Link href="/authors">Editorial Team</Link></li>
+                <li><Link href="/about">Careers</Link></li>
+                <li><Link href="/about">Press Kit</Link></li>
+                <li><Link href="/about">Investors</Link></li>
+                <li><Link href="/discover">Blog</Link></li>
               </ul>
             </div>
 
             <div>
               <div className="footer-col-title">Support</div>
               <ul className="footer-links">
-                <li><Link href="#">Help Center</Link></li>
-                <li><Link href="#">Community</Link></li>
-                <li><Link href="#">Contact Us</Link></li>
-                <li><Link href="#">API Docs</Link></li>
-                <li><Link href="#">Status Page</Link></li>
+                <li><Link href="/contact">Help Center</Link></li>
+                <li><Link href="/community">Community</Link></li>
+                <li><Link href="/contact">Contact Us</Link></li>
+                <li><Link href="/contact">API Docs</Link></li>
+                <li><Link href="/contact">Status Page</Link></li>
               </ul>
             </div>
           </div>

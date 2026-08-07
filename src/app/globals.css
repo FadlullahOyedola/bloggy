@@ -3,6 +3,13 @@
 :root {
   --background: #fafafa;
   --foreground: #111827;
+
+  /* Brand Theme Tokens */
+  --purple-700: #6d28d9;
+  --purple-600: #7c3aed;
+  --purple-500: #8b5cf6;
+  --purple-100: #ede9fe;
+  --purple-50: #f5f3ff;
 }
 
 @theme inline {
@@ -10,6 +17,19 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+
+  /* Keyframe mapping for Tailwind CSS v4 */
+  --animate-aurora: aurora 60s linear infinite;
+
+  @keyframes aurora {
+    from {
+      background-position: 50% 50%, 50% 50%;
+    }
+
+    to {
+      background-position: 350% 50%, 350% 50%;
+    }
+  }
 }
 
 html {
