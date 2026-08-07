@@ -46,7 +46,7 @@ export async function registerUser(formData: FormData) {
                 username,
                 password: hashedPassword,
                 verificationToken: token,
-                emailVerified: null,
+                emailVerified: false,
             },
         });
 

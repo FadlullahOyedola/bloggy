@@ -9,7 +9,10 @@ export async function GET(request: Request) {
     const email = searchParams.get("email");
 
     if (!token || !email) {
-        return NextResponse.json({ error: "Missing verification parameters." }, { status: 400 });
+        return NextResponse.json(
+            { error: "Missing verification parameters." },
+            { status: 400 }
+        );
     }
 
     try {
@@ -18,13 +21,16 @@ export async function GET(request: Request) {
         });
 
         if (!user || user.verificationToken !== token) {
-            return NextResponse.json({ error: "Invalid or expired verification token." }, { status: 400 });
+            return NextResponse.json(
+                { error: "Invalid or expired verification token." },
+                { status: 400 }
+            );
         }
 
         await prisma.user.update({
             where: { email },
             data: {
-                emailVerified: new Date(),
+                emailVerified: true,
                 verificationToken: null,
             },
         });
@@ -33,6 +39,9 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${appUrl}/login?verified=true`);
     } catch (err) {
         console.error("Verification Error:", err);
-        return NextResponse.json({ error: "An error occurred during email verification." }, { status: 500 });
+        return NextResponse.json(
+            { error: "An error occurred during email verification." },
+            { status: 500 }
+        );
     }
 }

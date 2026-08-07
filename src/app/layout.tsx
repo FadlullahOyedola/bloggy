@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Geist_Mono, Inter, Playfair_Display, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
   description: "A cinematic, premium homepage for Bloggy’s AI-powered digital magazine.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
