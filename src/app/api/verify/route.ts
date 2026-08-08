@@ -39,7 +39,7 @@ export async function GET(request: Request) {
             },
         });
 
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://bloggy-livid-one.vercel.app/login";
 
         // Redirect directly to onboarding page after successful verification
         return NextResponse.redirect(`${appUrl}/onboarding?verified=true`);
