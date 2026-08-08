@@ -1,359 +1,305 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import {
-    Mail,
+    Sparkles,
+    ArrowRight,
+    CheckCircle2,
     Lock,
+    Mail,
+    User,
     Eye,
     EyeOff,
-    ArrowRight,
+    Globe,
     Loader2,
-    Sparkles,
-    ShieldCheck,
-    CheckCircle2,
-    TrendingUp,
-    GitBranch,
-    Globe
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { AuroraBackground } from "@/components/ui/aurora-background";
-import { ButtonBorder } from "@/components/ui/button-border";
 
-// High-quality slideshow imagery matching editorial theme
-const BLOG_IMAGES = [
-    "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?q=80&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1600&auto=format&fit=crop",
-];
+function GithubLogo() {
+    return (
+        <svg className="w-4 h-4 fill-current text-slate-900" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+        </svg>
+    );
+}
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const router = useRouter();
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [socialLoading, setSocialLoading] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    // Background Slideshow Interval
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % BLOG_IMAGES.length);
-        }, 5000);
-        return () => clearInterval(interval);
-    }, []);
+    const [formData, setFormData] = useState({
+        fullName: "",
+        email: "",
+        password: "",
+        agreeToTerms: false,
+    });
 
-    // Form Submission
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
-        setLoading(true);
-
-        const formData = new FormData(e.currentTarget);
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
+        setIsLoading(true);
+        setErrorMessage("");
 
         try {
-            const res = await signIn("credentials", {
-                email,
-                password,
-                redirect: false,
+            const response = await fetch("/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
             });
 
-            if (res?.error) {
-                setError("Invalid email or password. Please check your credentials.");
-            } else {
-                router.push("/");
-                router.refresh();
-            }
-        } catch (err) {
-            setError("An unexpected error occurred. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    }
+            const data = await response.json();
 
-    // Social Auth Handler
-    const handleSocialSignIn = async (provider: string) => {
-        setSocialLoading(provider);
-        try {
-            await signIn(provider, { callbackUrl: "/" });
-        } catch (err) {
-            setError(`Failed to sign in with ${provider}`);
-            setSocialLoading(null);
+            if (!response.ok) {
+                throw new Error(data.message || "Registration failed. Please try again.");
+            }
+
+            // Redirect directly to verify-email route upon success
+            router.push(`/verify-email?email=${encodeURIComponent(formData.email)}`);
+        } catch (err: any) {
+            setErrorMessage(err.message || "An unexpected error occurred.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden bg-slate-950 font-sans">
-            {/* --- BACKGROUND SLIDESHOW WITH AURORA OVERLAY --- */}
-            <div className="absolute inset-0 z-0">
-                {BLOG_IMAGES.map((imgUrl, index) => (
-                    <div
-                        key={imgUrl}
-                        className={`absolute inset-0 transition-all duration-1000 ease-in-out bg-cover bg-center ${index === currentImageIndex ? "opacity-35 scale-105" : "opacity-0 scale-100"
-                            }`}
-                        style={{ backgroundImage: `url(${imgUrl})` }}
-                    />
-                ))}
-                {/* Subtle Gradient Veil */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/80 to-purple-950/40 backdrop-blur-[2px]" />
-            </div>
+        <div className="min-h-screen bg-[#FAF8FF] flex flex-col justify-between font-sans text-slate-900 antialiased">
+            {/* Top Header */}
+            <header className="px-6 py-6 max-w-7xl mx-auto w-full flex items-center justify-between">
+                <Link href="/" className="flex items-center gap-2.5 group">
+                    <div className="w-9 h-9 rounded-xl bg-[#6D28D9] flex items-center justify-center text-white font-serif font-black text-xl shadow-md group-hover:bg-[#5B21B6] transition-all">
+                        B
+                    </div>
+                    <span className="font-serif font-bold text-2xl tracking-tight text-slate-900">
+                        Bloggy<span className="text-[#6D28D9]">.</span>
+                    </span>
+                </Link>
 
-            {/* --- MAIN GLASS CARD --- */}
-            <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 flex w-full max-w-5xl flex-col overflow-hidden rounded-[32px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl shadow-[0_24px_80px_rgba(0,0,0,0.4)] border border-white/20 dark:border-slate-800/80 md:flex-row"
-            >
-                {/* LEFT COLUMN: AUTH FORM */}
-                <div className="flex w-full flex-col justify-between p-8 sm:p-10 md:w-1/2 lg:p-12">
-                    <div>
-                        {/* Header & Brand */}
-                        <div className="flex items-center justify-between">
-                            <Link
-                                href="/"
-                                className="inline-flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-purple-600 rounded-full p-1 transition-all"
-                            >
-                                <span className="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-purple-700 to-purple-400 group-hover:scale-125 transition-transform" />
-                                <span className="text-xl font-bold font-sans tracking-tight text-slate-900 dark:text-white">
-                                    Bloggy
-                                </span>
-                            </Link>
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-800">
-                                <Sparkles size={12} />
-                                Secure Portal
-                            </span>
-                        </div>
+                <p className="text-xs font-semibold text-slate-600">
+                    Already have an account?{" "}
+                    <Link href="/login" className="text-[#6D28D9] hover:underline font-bold">
+                        Log in
+                    </Link>
+                </p>
+            </header>
 
-                        <div className="mt-8">
-                            <h1 className="text-3xl font-serif font-bold text-slate-900 dark:text-white tracking-tight">
-                                Welcome back
-                            </h1>
-                            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                                Sign in to manage your articles, drafts, and reader insights.
-                            </p>
-                        </div>
-
-                        {/* Error Notification */}
-                        <AnimatePresence>
-                            {error && (
-                                <motion.div
-                                    initial={{ opacity: 0, height: 0, y: -10 }}
-                                    animate={{ opacity: 1, height: "auto", y: 0 }}
-                                    exit={{ opacity: 0, height: 0, y: -10 }}
-                                    className="mt-6 rounded-2xl bg-red-50 dark:bg-red-950/40 p-4 text-xs font-medium text-red-600 dark:text-red-400 border border-red-200/80 dark:border-red-900/50 flex items-center justify-between gap-2"
-                                >
-                                    <span>{error}</span>
-                                    <button
-                                        onClick={() => setError(null)}
-                                        className="text-red-500 hover:text-red-700 dark:hover:text-red-300 text-sm font-bold"
-                                    >
-                                        ✕
-                                    </button>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-
-                        {/* Social Logins */}
-                        <div className="mt-6 grid grid-cols-2 gap-3">
-                            <button
-                                type="button"
-                                onClick={() => handleSocialSignIn("google")}
-                                disabled={!!socialLoading || loading}
-                                className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all active:scale-95 disabled:opacity-50"
-                            >
-                                {socialLoading === "google" ? (
-                                    <Loader2 size={16} className="animate-spin text-purple-600" />
-                                ) : (
-                                    <Globe size={16} className="text-purple-600" />
-                                )}
-                                <span>Google</span>
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => handleSocialSignIn("github")}
-                                disabled={!!socialLoading || loading}
-                                className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all active:scale-95 disabled:opacity-50"
-                            >
-                                {socialLoading === "github" ? (
-                                    <Loader2 size={16} className="animate-spin text-purple-600" />
-                                ) : (
-                                    <GitBranch size={16} className="text-slate-900 dark:text-white" />
-                                )}
-                                <span>GitHub</span>
-                            </button>
-                        </div>
-
-                        {/* Divider */}
-                        <div className="relative my-6">
-                            <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-slate-200 dark:border-slate-800" />
-                            </div>
-                            <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest">
-                                <span className="bg-white dark:bg-slate-900 px-3 text-slate-400">
-                                    Or continue with email
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Credentials Form */}
-                        <form className="space-y-4" onSubmit={handleSubmit}>
-                            {/* Email */}
-                            <div>
-                                <label
-                                    htmlFor="email"
-                                    className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5"
-                                >
-                                    Email Address
-                                </label>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                                        <Mail size={18} />
-                                    </div>
-                                    <input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        required
-                                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/50 dark:bg-slate-800/30 pl-11 pr-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-600/10 transition-all"
-                                        placeholder="name@example.com"
-                                    />
-                                </div>
+            {/* Main Registration Layout */}
+            <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12">
+                <div className="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 bg-white rounded-3xl border border-slate-200/80 shadow-xl overflow-hidden">
+                    {/* Left Hero / Perks Panel */}
+                    <div className="lg:col-span-5 bg-gradient-to-br from-[#6D28D9] to-[#4C1D95] p-8 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden">
+                        <div className="relative z-10 space-y-6">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-purple-200">
+                                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                                <span>Join Bloggy Community</span>
                             </div>
 
-                            {/* Password */}
-                            <div>
-                                <div className="flex items-center justify-between mb-1.5">
-                                    <label
-                                        htmlFor="password"
-                                        className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300"
-                                    >
-                                        Password
-                                    </label>
-                                    <Link
-                                        href="/forgot-password"
-                                        className="text-xs font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 hover:underline"
-                                    >
-                                        Forgot?
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                                        <Lock size={18} />
-                                    </div>
-                                    <input
-                                        id="password"
-                                        name="password"
-                                        type={showPassword ? "text" : "password"}
-                                        required
-                                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/50 dark:bg-slate-800/30 pl-11 pr-11 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-600/10 transition-all"
-                                        placeholder="••••••••"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none"
-                                        aria-label={showPassword ? "Hide password" : "Show password"}
-                                    >
-                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                    </button>
-                                </div>
-                            </div>
+                            <h2 className="font-serif text-2xl sm:text-3xl font-extrabold leading-snug">
+                                Start sharing your ideas with the world.
+                            </h2>
 
-                            {/* Submit CTA */}
-                            <button
-                                type="submit"
-                                disabled={loading || !!socialLoading}
-                                className="w-full min-h-[48px] mt-2 flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white font-bold text-sm shadow-lg shadow-purple-600/25 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:hover:translate-y-0"
-                            >
-                                {loading ? (
-                                    <>
-                                        <Loader2 size={18} className="animate-spin" />
-                                        <span>Signing in...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <span>Sign in to Dashboard</span>
-                                        <ArrowRight size={16} />
-                                    </>
-                                )}
-                            </button>
-                        </form>
+                            <ul className="space-y-4 text-xs sm:text-sm text-purple-100/90 pt-2">
+                                <li className="flex items-start gap-3">
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                                    <span>Publish essays, code snippets, and research papers.</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                                    <span>Customize your interest feed across AI, Design, and Engineering.</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                                    <span>Connect with verified authors, fellow students, and developers.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div className="relative z-10 pt-8 border-t border-purple-400/30 text-xs text-purple-200/70">
+                            By joining, you get free access to all public collections and creator tools.
+                        </div>
+
+                        {/* Decorative Overlay Spheres */}
+                        <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full bg-purple-500/20 blur-2xl pointer-events-none" />
                     </div>
 
-                    {/* Footer Registration Link */}
-                    <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                        <span className="text-slate-500 dark:text-slate-400">Don't have an account?</span>
-                        <Link
-                            href="/register"
-                            className="font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 hover:underline px-2 py-1 rounded-lg transition-colors"
-                        >
-                            Create Account →
-                        </Link>
-                    </div>
-                </div>
-
-                {/* RIGHT COLUMN: BRAND SHOWCASE & LIVE CARD */}
-                <div className="relative hidden w-1/2 md:block p-3">
-                    <div className="relative h-full w-full overflow-hidden rounded-[24px] bg-slate-900 flex flex-col justify-between p-8">
-                        {/* Background Image Showcase */}
-                        <div
-                            className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity scale-105 transition-transform duration-10000 ease-out"
-                            style={{
-                                backgroundImage:
-                                    "url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop')",
-                            }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-purple-950/60 to-transparent" />
-
-                        {/* Top Showcase Header */}
-                        <div className="relative z-10 flex items-center justify-between">
-                            <span className="tag tag-white text-[10px]">Bloggy Editorial</span>
-                            <div className="flex items-center gap-1 text-[11px] text-purple-200 font-mono">
-                                <ShieldCheck size={14} className="text-purple-400" /> Encrypted Session
-                            </div>
-                        </div>
-
-                        {/* Bottom Floating Stats & Quote */}
-                        <div className="relative z-10 space-y-4">
-                            <div className="space-y-2">
-                                <h3 className="text-2xl font-serif font-bold text-white leading-tight">
-                                    "Writing is thinking on paper. Bloggy makes sure your thoughts reach the right minds."
-                                </h3>
-                                <p className="text-xs text-purple-200/80">
-                                    Join over 48,000 independent authors and creators worldwide.
+                    {/* Right Form Panel */}
+                    <div className="lg:col-span-7 p-8 sm:p-10 bg-white flex flex-col justify-center">
+                        <div className="max-w-md mx-auto w-full space-y-6">
+                            <div className="space-y-1 text-left">
+                                <h1 className="font-serif text-2xl font-bold text-slate-900">
+                                    Create your account
+                                </h1>
+                                <p className="text-xs text-slate-500">
+                                    Enter your details below to get started.
                                 </p>
                             </div>
 
-                            {/* Glass Interactive Widget */}
-                            <div className="rounded-2xl bg-white/10 backdrop-blur-xl p-4 border border-white/20 shadow-2xl">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center text-purple-300">
-                                            <TrendingUp size={18} />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-white">Live Platform Status</p>
-                                            <p className="text-[10px] text-purple-200/70">2.4M Readers Active Today</p>
-                                        </div>
-                                    </div>
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-[10px] font-semibold text-emerald-300">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                        Optimal
-                                    </span>
-                                </div>
+                            {/* Social Signup Options */}
+                            <div className="grid grid-cols-2 gap-3">
+                                <button
+                                    type="button"
+                                    className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                                >
+                                    <Globe className="w-4 h-4 text-slate-600" />
+                                    <span>Google</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                                >
+                                    <GithubLogo />
+                                    <span>GitHub</span>
+                                </button>
                             </div>
+
+                            <div className="relative flex items-center justify-center">
+                                <div className="border-t border-slate-200 w-full" />
+                                <span className="bg-white px-3 text-[10px] font-bold uppercase text-slate-400 tracking-wider absolute">
+                                    Or continue with email
+                                </span>
+                            </div>
+
+                            {/* Error Message Banner */}
+                            {errorMessage && (
+                                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-medium text-left">
+                                    {errorMessage}
+                                </div>
+                            )}
+
+                            {/* Form Input Block */}
+                            <form onSubmit={handleSubmit} className="space-y-4 text-left">
+                                {/* Full Name */}
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-700 block">
+                                        Full Name
+                                    </label>
+                                    <div className="relative">
+                                        <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                                        <input
+                                            type="text"
+                                            name="fullName"
+                                            required
+                                            value={formData.fullName}
+                                            onChange={handleChange}
+                                            placeholder="e.g. Alex Rivera"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-[#6D28D9] focus:bg-white transition-all"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Email Address */}
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-700 block">
+                                        Email Address
+                                    </label>
+                                    <div className="relative">
+                                        <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            placeholder="name@example.com"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-[#6D28D9] focus:bg-white transition-all"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Password */}
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-700 block">
+                                        Password
+                                    </label>
+                                    <div className="relative">
+                                        <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            required
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            placeholder="••••••••"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-10 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-[#6D28D9] focus:bg-white transition-all"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="w-4 h-4" />
+                                            ) : (
+                                                <Eye className="w-4 h-4" />
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Checkbox Terms */}
+                                <div className="flex items-center gap-2 pt-1">
+                                    <input
+                                        type="checkbox"
+                                        id="agreeToTerms"
+                                        name="agreeToTerms"
+                                        required
+                                        checked={formData.agreeToTerms}
+                                        onChange={handleChange}
+                                        className="w-4 h-4 rounded border-slate-300 text-[#6D28D9] focus:ring-[#6D28D9] accent-[#6D28D9] cursor-pointer"
+                                    />
+                                    <label htmlFor="agreeToTerms" className="text-xs text-slate-600 cursor-pointer">
+                                        I agree to the{" "}
+                                        <Link href="/terms" className="text-[#6D28D9] font-bold hover:underline">
+                                            Terms of Service
+                                        </Link>{" "}
+                                        and{" "}
+                                        <Link href="/privacy" className="text-[#6D28D9] font-bold hover:underline">
+                                            Privacy Policy
+                                        </Link>
+                                    </label>
+                                </div>
+
+                                {/* Submit Button */}
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="w-full py-3 px-4 bg-[#6D28D9] hover:bg-[#5B21B6] disabled:bg-purple-300 text-white font-bold text-xs rounded-xl shadow-md transition-all hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer mt-2"
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            <span>Creating Account...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>Create Account</span>
+                                            <ArrowRight className="w-4 h-4" />
+                                        </>
+                                    )}
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </main>
+
+            {/* Footer copyright */}
+            <footer className="py-6 text-center text-xs text-slate-400">
+                &copy; {new Date().getFullYear()} Bloggy Inc. All rights reserved.
+            </footer>
         </div>
     );
 }

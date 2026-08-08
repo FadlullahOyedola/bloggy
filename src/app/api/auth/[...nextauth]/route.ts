@@ -1,3 +1,3 @@
-// Fallback handlers to avoid missing import error for ../../../../auth
-export const GET = async () => new Response('Not Implemented', { status: 501 });
-export const POST = GET;
+import { handlers } from "../../../auth";
+
+export { handlers as GET, handlers as POST };

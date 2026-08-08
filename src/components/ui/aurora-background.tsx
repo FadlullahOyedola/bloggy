@@ -7,7 +7,7 @@ const cn = (...args: Array<string | false | null | undefined>) =>
     args.filter(Boolean).join(" ");
 
 interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
-    children: ReactNode;
+    children?: ReactNode;
     showRadialGradient?: boolean;
 }
 

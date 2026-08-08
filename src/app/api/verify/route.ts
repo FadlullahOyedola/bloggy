@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+// Global Prisma client instance to prevent exceeding connection pool limits during hot-reloads
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
+const prisma = globalForPrisma.prisma || new PrismaClient();
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -27,6 +30,7 @@ export async function GET(request: Request) {
             );
         }
 
+        // Update user: mark email verified and reset token
         await prisma.user.update({
             where: { email },
             data: {
@@ -36,7 +40,9 @@ export async function GET(request: Request) {
         });
 
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-        return NextResponse.redirect(`${appUrl}/login?verified=true`);
+
+        // Redirect directly to onboarding page after successful verification
+        return NextResponse.redirect(`${appUrl}/onboarding?verified=true`);
     } catch (err) {
         console.error("Verification Error:", err);
         return NextResponse.json(

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
     Cpu, Briefcase, DollarSign, Heart, Plane, Microscope,
     Palette, Tv, Trophy, Globe, Landmark, Smile, Compass,
-    BookOpen, Sparkles, CheckCircle2, ArrowRight, Loader2, Search, Zap, Layers
+    BookOpen, Sparkles, CheckCircle2, ArrowRight, Loader2, Search
 } from "lucide-react";
 
 const INTEREST_GROUPS = [
@@ -15,7 +15,8 @@ const INTEREST_GROUPS = [
         description: "AI, full-stack systems, cloud engineering, and modern web architectures",
         articles: "14.2k Articles",
         readers: "85k Readers",
-        gradient: "from-purple-500/10 to-indigo-500/10",
+        gradient: "from-purple-900/80 to-indigo-950/80",
+        bgImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Artificial Intelligence (AI)", "Machine Learning", "Generative AI",
             "Programming", "Web Development", "Mobile Development", "Game Development",
@@ -30,7 +31,8 @@ const INTEREST_GROUPS = [
         description: "Venture capital, startup growth, modern leadership, and corporate strategy",
         articles: "9.8k Articles",
         readers: "62k Readers",
-        gradient: "from-blue-500/10 to-cyan-500/10",
+        gradient: "from-blue-900/80 to-slate-950/80",
+        bgImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Entrepreneurship", "Startups", "Leadership", "Management",
             "Marketing", "Digital Marketing", "Branding", "Sales",
@@ -44,7 +46,8 @@ const INTEREST_GROUPS = [
         description: "Personal finance, global markets, decentralized economy, and real estate",
         articles: "11.5k Articles",
         readers: "74k Readers",
-        gradient: "from-emerald-500/10 to-teal-500/10",
+        gradient: "from-emerald-900/80 to-teal-950/80",
+        bgImage: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Personal Finance", "Investing", "Stock Market", "Cryptocurrency",
             "Real Estate", "Saving", "Budgeting", "Side Hustles",
@@ -57,7 +60,8 @@ const INTEREST_GROUPS = [
         description: "Academic writing, pedagogical methods, online courses, and research",
         articles: "6.4k Articles",
         readers: "41k Readers",
-        gradient: "from-amber-500/10 to-orange-500/10",
+        gradient: "from-amber-900/80 to-orange-950/80",
+        bgImage: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Online Learning", "Study Tips", "Scholarships", "University Life",
             "Academic Writing", "Research", "Language Learning", "STEM",
@@ -70,7 +74,8 @@ const INTEREST_GROUPS = [
         description: "Mental clarity, cognitive science, fitness routines, and holistic living",
         articles: "8.1k Articles",
         readers: "53k Readers",
-        gradient: "from-rose-500/10 to-pink-500/10",
+        gradient: "from-rose-900/80 to-pink-950/80",
+        bgImage: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Mental Health", "Fitness", "Nutrition", "Healthy Living",
             "Medicine", "Public Health", "Yoga", "Meditation",
@@ -83,7 +88,8 @@ const INTEREST_GROUPS = [
         description: "Minimalism, contemporary fashion, relationship dynamics, and home design",
         articles: "7.9k Articles",
         readers: "48k Readers",
-        gradient: "from-violet-500/10 to-purple-500/10",
+        gradient: "from-violet-900/80 to-purple-950/80",
+        bgImage: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Personal Development", "Minimalism", "Fashion", "Beauty",
             "Relationships", "Parenting", "Home Improvement", "Hobbies",
@@ -96,7 +102,8 @@ const INTEREST_GROUPS = [
         description: "Global adventures, culinary arts, digital nomad culture, and coffee",
         articles: "12.8k Articles",
         readers: "91k Readers",
-        gradient: "from-sky-500/10 to-blue-500/10",
+        gradient: "from-sky-900/80 to-blue-950/80",
+        bgImage: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Adventure Travel", "Budget Travel", "Luxury Travel", "Road Trips",
             "Solo Travel", "Family Travel", "Travel Tips", "Digital Nomad",
@@ -111,7 +118,8 @@ const INTEREST_GROUPS = [
         description: "Graphic design, visual arts, creative writing, architecture, and film",
         articles: "5.3k Articles",
         readers: "36k Readers",
-        gradient: "from-fuchsia-500/10 to-pink-500/10",
+        gradient: "from-fuchsia-900/80 to-pink-950/80",
+        bgImage: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Photography", "Graphic Design", "Illustration", "Painting",
             "Animation", "Music", "Film", "Architecture", "Interior Design", "Creative Writing"
@@ -123,7 +131,8 @@ const INTEREST_GROUPS = [
         description: "Pop culture, cinema reviews, anime, eSports, and interactive gaming",
         articles: "15.1k Articles",
         readers: "110k Readers",
-        gradient: "from-purple-500/10 to-violet-500/10",
+        gradient: "from-purple-900/80 to-violet-950/80",
+        bgImage: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Movies", "TV Shows", "Celebrities", "Anime", "Comics",
             "Gaming", "Streaming", "Pop Culture", "Books", "Podcasts"
@@ -135,7 +144,8 @@ const INTEREST_GROUPS = [
         description: "Global football, Formula 1 racing, basketball, and athletic endurance",
         articles: "9.2k Articles",
         readers: "70k Readers",
-        gradient: "from-emerald-500/10 to-green-500/10",
+        gradient: "from-emerald-900/80 to-green-950/80",
+        bgImage: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Football", "Basketball", "Tennis", "Athletics", "Formula 1",
             "Motorsport", "Cricket", "Golf", "Boxing", "eSports"
@@ -147,7 +157,8 @@ const INTEREST_GROUPS = [
         description: "Astronomical discoveries, climate action, quantum physics, and nature",
         articles: "8.7k Articles",
         readers: "58k Readers",
-        gradient: "from-teal-500/10 to-emerald-500/10",
+        gradient: "from-teal-900/80 to-emerald-950/80",
+        bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Astronomy", "Biology", "Chemistry", "Physics", "Space Exploration",
             "Climate Science", "Environment", "Wildlife", "Marine Science",
@@ -161,7 +172,8 @@ const INTEREST_GROUPS = [
         description: "Global diplomacy, public policy, sociological studies, and current affairs",
         articles: "18.4k Articles",
         readers: "135k Readers",
-        gradient: "from-slate-500/10 to-gray-500/10",
+        gradient: "from-slate-900/80 to-gray-950/80",
+        bgImage: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "World News", "African News", "Nigerian News", "Politics",
             "Government", "Elections", "Diplomacy", "Law", "Human Rights",
@@ -175,7 +187,8 @@ const INTEREST_GROUPS = [
         description: "Ethics, spiritual growth, comparative theology, and ancient philosophy",
         articles: "4.1k Articles",
         readers: "29k Readers",
-        gradient: "from-amber-500/10 to-yellow-500/10",
+        gradient: "from-amber-900/80 to-yellow-950/80",
+        bgImage: "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Islam", "Christianity", "Traditional Religions", "Philosophy",
             "Ethics", "Spiritual Growth", "Comparative Religion"
@@ -187,7 +200,8 @@ const INTEREST_GROUPS = [
         description: "Social media dynamics, SEO, content creation, and hardware reviews",
         articles: "11.0k Articles",
         readers: "82k Readers",
-        gradient: "from-indigo-500/10 to-purple-500/10",
+        gradient: "from-indigo-900/80 to-purple-950/80",
+        bgImage: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Social Media", "Content Creation", "Influencer Marketing", "Blogging",
             "Podcasting", "YouTube", "Streaming", "Email Marketing", "SEO",
@@ -201,7 +215,8 @@ const INTEREST_GROUPS = [
         description: "Electric vehicles, automotive design, parenting, and family development",
         articles: "5.8k Articles",
         readers: "40k Readers",
-        gradient: "from-blue-500/10 to-indigo-500/10",
+        gradient: "from-blue-900/80 to-indigo-950/80",
+        bgImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop",
         topics: [
             "Electric Vehicles", "Cars", "Motorcycles", "Car Maintenance",
             "Automotive Technology", "Parenting", "Child Development",
@@ -219,7 +234,7 @@ export default function OnboardingPage() {
 
     const toggleInterest = (topic: string) => {
         if (selectedInterests.includes(topic)) {
-            setSelectedInterests(selectedInterests.filter(t => t !== topic));
+            setSelectedInterests(selectedInterests.filter((t) => t !== topic));
         } else {
             setSelectedInterests([...selectedInterests, topic]);
         }
@@ -245,7 +260,6 @@ export default function OnboardingPage() {
             });
 
             if (!res.ok) {
-                // Non-blocking fallback if route isn't created on backend yet
                 console.warn("API route not found, performing client navigation.");
             }
         } catch (err: any) {
@@ -257,7 +271,6 @@ export default function OnboardingPage() {
 
     return (
         <div className="min-h-screen bg-[#F8F7FC] text-slate-900 selection:bg-[#6D28D9] selection:text-white font-sans">
-
             {/* Top Navigation Bar */}
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-purple-900/5 px-6 py-4">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -282,7 +295,6 @@ export default function OnboardingPage() {
             </header>
 
             <main className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 space-y-10">
-
                 {/* Editorial Hero Header */}
                 <div className="bg-white rounded-3xl p-8 sm:p-12 border border-purple-900/5 shadow-xl shadow-purple-900/5 text-center space-y-6 relative overflow-hidden">
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-gradient-to-b from-purple-100/60 to-transparent blur-2xl pointer-events-none"></div>
@@ -313,10 +325,12 @@ export default function OnboardingPage() {
 
                     {/* Dynamic Status Counter */}
                     <div className="pt-2 flex justify-center">
-                        <div className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all shadow-sm ${isReady
-                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                : "bg-purple-50 text-[#6D28D9] border border-purple-100"
-                            }`}>
+                        <div
+                            className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all shadow-sm ${isReady
+                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                    : "bg-purple-50 text-[#6D28D9] border border-purple-100"
+                                }`}
+                        >
                             {isReady ? (
                                 <>
                                     <CheckCircle2 size={18} className="text-emerald-600" />
@@ -325,7 +339,9 @@ export default function OnboardingPage() {
                             ) : (
                                 <>
                                     <span className="w-2.5 h-2.5 rounded-full bg-[#6D28D9] animate-pulse"></span>
-                                    <span>Select {remaining} more interest{remaining === 1 ? "" : "s"} ({selectedInterests.length}/10)</span>
+                                    <span>
+                                        Select {remaining} more interest{remaining === 1 ? "" : "s"} ({selectedInterests.length}/10)
+                                    </span>
                                 </>
                             )}
                         </div>
@@ -338,57 +354,83 @@ export default function OnboardingPage() {
                     </div>
                 )}
 
-                {/* Pinterest-Inspired Grid Sections */}
+                {/* Interest Groups Grid */}
                 <div className="space-y-8">
                     {INTEREST_GROUPS.map((group, idx) => {
                         const IconComponent = group.icon;
-                        const matchingTopics = group.topics.filter(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+                        const matchingTopics = group.topics.filter((t) =>
+                            t.toLowerCase().includes(searchQuery.toLowerCase())
+                        );
 
                         if (searchQuery && matchingTopics.length === 0) return null;
 
                         return (
-                            <div key={idx} className="bg-white rounded-3xl p-6 sm:p-8 border border-purple-900/5 shadow-xl shadow-purple-900/5 space-y-6">
+                            <div
+                                key={idx}
+                                className="relative rounded-3xl p-6 sm:p-8 overflow-hidden shadow-xl shadow-purple-900/5 space-y-6 group/card"
+                            >
+                                {/* Visual Category Background Image */}
+                                <img
+                                    src={group.bgImage}
+                                    alt={group.category}
+                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+                                />
 
-                                {/* Section Header */}
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-5 gap-4">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${group.gradient} text-[#6D28D9] flex items-center justify-center border border-purple-900/5 shadow-inner`}>
-                                            <IconComponent size={24} />
+                                {/* Dark Gradient Overlay to ensure maximum legibility */}
+                                <div
+                                    className={`absolute inset-0 bg-gradient-to-br ${group.gradient} backdrop-blur-[2px]`}
+                                />
+                                <div className="absolute inset-0 bg-slate-950/40" />
+
+                                {/* Section Content */}
+                                <div className="relative z-10 text-white space-y-6">
+                                    {/* Section Header */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/20 pb-5 gap-4">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md text-purple-300 flex items-center justify-center border border-white/20 shadow-inner">
+                                                <IconComponent size={24} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-extrabold text-white tracking-tight drop-shadow-md">
+                                                    {group.category}
+                                                </h3>
+                                                <p className="text-xs text-purple-200/90 drop-shadow">{group.description}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="text-lg font-bold text-slate-900 tracking-tight">{group.category}</h3>
-                                            <p className="text-xs text-slate-500">{group.description}</p>
+                                        <div className="flex items-center gap-3 text-xs font-semibold text-purple-200/80">
+                                            <span>{group.articles}</span>
+                                            <span>•</span>
+                                            <span>{group.readers}</span>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3 text-xs font-semibold text-slate-400">
-                                        <span>{group.articles}</span>
-                                        <span>•</span>
-                                        <span>{group.readers}</span>
-                                    </div>
-                                </div>
 
-                                {/* Interactive Card Grid */}
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                    {(searchQuery ? matchingTopics : group.topics).map((topic) => {
-                                        const selected = selectedInterests.includes(topic);
-                                        return (
-                                            <button
-                                                type="button"
-                                                key={topic}
-                                                onClick={() => toggleInterest(topic)}
-                                                className={`p-4 rounded-2xl text-xs sm:text-sm font-medium text-left transition-all duration-300 flex items-center justify-between border group ${selected
-                                                        ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-lg shadow-purple-500/25 scale-[1.02]"
-                                                        : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:shadow-md hover:text-slate-900"
-                                                    }`}
-                                            >
-                                                <span className="truncate pr-1">{topic}</span>
-                                                <div className={`w-5 h-5 rounded-full flex items-center shrink-0 justify-center transition-all ${selected ? "bg-white/20 text-white" : "opacity-0 group-hover:opacity-40 text-slate-400"
-                                                    }`}>
-                                                    <CheckCircle2 size={14} />
-                                                </div>
-                                            </button>
-                                        );
-                                    })}
+                                    {/* Interactive Card Grid */}
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                        {(searchQuery ? matchingTopics : group.topics).map((topic) => {
+                                            const selected = selectedInterests.includes(topic);
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={topic}
+                                                    onClick={() => toggleInterest(topic)}
+                                                    className={`p-4 rounded-2xl text-xs sm:text-sm font-medium text-left transition-all duration-300 flex items-center justify-between border cursor-pointer backdrop-blur-md ${selected
+                                                            ? "bg-[#6D28D9] text-white border-purple-400 shadow-lg shadow-purple-900/50 scale-[1.02]"
+                                                            : "bg-white/15 text-white border-white/20 hover:bg-white/25 hover:border-white/40 hover:scale-[1.01]"
+                                                        }`}
+                                                >
+                                                    <span className="truncate pr-1 drop-shadow-sm">{topic}</span>
+                                                    <div
+                                                        className={`w-5 h-5 rounded-full flex items-center shrink-0 justify-center transition-all ${selected
+                                                                ? "bg-white/20 text-white"
+                                                                : "opacity-0 group-hover:opacity-60 text-white/60"
+                                                            }`}
+                                                    >
+                                                        <CheckCircle2 size={14} />
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         );
@@ -399,7 +441,9 @@ export default function OnboardingPage() {
                 <div className="sticky bottom-6 z-30 bg-white/90 backdrop-blur-xl p-5 sm:p-6 rounded-3xl shadow-2xl border border-purple-900/10 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="text-xs sm:text-sm text-slate-600 font-medium text-center sm:text-left">
                         {!isReady ? (
-                            <span>Select <strong className="text-[#6D28D9]">{remaining}</strong> more topics to unlock step 2.</span>
+                            <span>
+                                Select <strong className="text-[#6D28D9]">{remaining}</strong> more topics to unlock step 2.
+                            </span>
                         ) : (
                             <span className="text-emerald-700 font-semibold flex items-center gap-1.5 justify-center sm:justify-start">
                                 <CheckCircle2 size={16} /> Ready to refine your niche topics.
@@ -429,7 +473,6 @@ export default function OnboardingPage() {
                         )}
                     </button>
                 </div>
-
             </main>
         </div>
     );
