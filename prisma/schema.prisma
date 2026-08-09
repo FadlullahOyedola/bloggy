@@ -32,6 +32,19 @@ enum PostType {
   DRAFT
 }
 
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  low
+  normal
+  urgent
+}
+
 model User {
   id                String           @id @default(cuid())
   email             String           @unique
@@ -49,11 +62,16 @@ model User {
   readingStreak     Int              @default(12)
   articlesRead      Int              @default(48)
   balance           Float            @default(551.44)
-  
+
   // Preferences & Onboarding
   selectedInterests String[]
   selectedTopics    String[]
   followedAuthorIds String[]
+
+  // Settings & Support Relations
+  privacySettings   PrivacySettings?
+  cookiePreferences CookiePreferences?
+  supportTickets    SupportTicket[]
 
   // Relations
   posts            Post[]
@@ -64,8 +82,56 @@ model User {
   messagesReceived Message[]        @relation("ReceivedMessages")
   userChallenges   UserChallenge[]
 
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PrivacySettings {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileVisibility  String   @default("public")
+  whoCanFollow       String   @default("everyone")
+  whoCanComment      String   @default("everyone")
+  whoCanMention      String   @default("everyone")
+  showActivityStatus Boolean  @default(true)
+  allowIndexing      Boolean  @default(true)
+  updatedAt          DateTime @updatedAt
+}
+
+model CookiePreferences {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  essential       Boolean  @default(true)
+  functional      Boolean  @default(true)
+  analytics       Boolean  @default(true)
+  personalization Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+}
+
+model SupportTicket {
+  id          String         @id @default(cuid())
+  ticketId    String         @unique
+  userId      String?
+  user        User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name        String
+  email       String
+  phone       String?
+  category    String
+  priority    TicketPriority @default(normal)
+  subject     String
+  message     String         @db.Text
+  environment String?
+  handle      String?
+  status      TicketStatus   @default(OPEN)
+
+  // Admin Response Field
+  adminResponse String?      @db.Text
+  respondedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Post {
@@ -84,8 +150,8 @@ model Post {
   isSaved     Boolean  @default(false)
   isTrending  Boolean  @default(false)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Collection {
