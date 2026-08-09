@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
+import logo from "@/app/logo.png.webp";
 
 export function GoogleLogo() {
     return (
@@ -33,6 +34,7 @@ export default function LoginPage() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const logoSrc = typeof logo === "string" ? logo : logo.src;
 
     // Restore saved email from local storage on mount
     useEffect(() => {
@@ -92,9 +94,8 @@ export default function LoginPage() {
                 {/* Left Form Column */}
                 <div className="p-8 sm:p-12 flex flex-col justify-between bg-white">
                     <div>
-                        <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl text-slate-900">
-                            <span className="w-4 h-4 rounded-full bg-purple-600" />
-                            Bloggy
+                        <Link href="/" className="inline-flex items-center gap-2">
+                            <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
                         </Link>
 
                         <h1 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 mt-8">

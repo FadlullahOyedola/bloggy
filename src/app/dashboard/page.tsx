@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import logo from "@/app/logo.png.webp";
 import {
     Sparkles,
     Search,
@@ -51,6 +52,8 @@ interface Post {
 }
 
 export default function BloggyDashboardPage() {
+    const logoSrc = typeof logo === "string" ? logo : logo.src;
+
     // User Session & Dynamic Name/Avatar States
     const [userName, setUserName] = useState("Fadlullah");
     const [userEmail, setUserEmail] = useState("fadlullahoyedola@gmail.com");
@@ -240,12 +243,7 @@ export default function BloggyDashboardPage() {
                         href="/"
                         className="flex items-center gap-2 group transition-transform duration-200 hover:scale-105"
                     >
-                        <div className="w-9 h-9 bg-gradient-to-tr from-[#6D28D9] to-purple-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-purple-500/20">
-                            <Sparkles size={20} />
-                        </div>
-                        <span className="font-serif text-2xl font-black text-[#6D28D9] tracking-tight">
-                            Bloggy
-                        </span>
+                        <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
                     </Link>
                 </div>
 
@@ -747,8 +745,8 @@ export default function BloggyDashboardPage() {
                                 onClick={handleCreatePost}
                                 disabled={!postContent.trim()}
                                 className={`px-5 py-2 rounded-xl font-bold text-xs transition-all shadow-md ${postContent.trim()
-                                        ? "bg-[#6D28D9] hover:bg-purple-800 text-white shadow-purple-500/20 cursor-pointer"
-                                        : "bg-slate-100 text-slate-400 cursor-not-allowed shadow-none"
+                                    ? "bg-[#6D28D9] hover:bg-purple-800 text-white shadow-purple-500/20 cursor-pointer"
+                                    : "bg-slate-100 text-slate-400 cursor-not-allowed shadow-none"
                                     }`}
                             >
                                 Post
@@ -764,8 +762,8 @@ export default function BloggyDashboardPage() {
                                     type="button"
                                     onClick={() => setActiveTab(tab)}
                                     className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer ${activeTab === tab
-                                            ? "bg-[#6D28D9] text-white shadow-md shadow-purple-500/20"
-                                            : "bg-white text-slate-600 hover:bg-purple-50 border border-purple-900/5"
+                                        ? "bg-[#6D28D9] text-white shadow-md shadow-purple-500/20"
+                                        : "bg-white text-slate-600 hover:bg-purple-50 border border-purple-900/5"
                                         }`}
                                 >
                                     {tab}

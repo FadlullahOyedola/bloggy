@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/app/logo.png.webp";
 import {
   Search,
   Sparkles,
@@ -42,6 +43,8 @@ const cn = (...args: Array<string | false | null | undefined>): string =>
   args.filter(Boolean).join(" ");
 
 export type VerificationType = "GOLD" | "PURPLE" | "BLUE" | "NONE";
+
+const logoSrc = typeof logo === "string" ? logo : logo.src;
 
 export interface Article {
   slug: string;
@@ -468,12 +471,7 @@ export const PremiumNavbar: React.FC<{
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Bloggy Branding */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-[#6D28D9] flex items-center justify-center text-white font-serif font-black text-xl shadow-md group-hover:bg-[#5B21B6] transition-all">
-            B
-          </div>
-          <span className="font-serif font-bold text-2xl tracking-tight text-slate-900">
-            Bloggy<span className="text-[#6D28D9]">.</span>
-          </span>
+          <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
         </Link>
 
         {/* Clean Center Navigation */}
@@ -556,10 +554,7 @@ export const MobileDrawer: React.FC<{
         >
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#6D28D9] flex items-center justify-center text-white font-serif font-bold text-lg">
-                B
-              </div>
-              <span className="font-serif font-bold text-lg text-slate-900">Bloggy</span>
+              <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
             </div>
             <button
               onClick={onClose}
@@ -1521,10 +1516,7 @@ export const CompleteFooter: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-600">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-[#6D28D9] flex items-center justify-center text-white font-serif font-bold text-xs">
-            B
-          </div>
-          <span className="font-serif font-bold text-white text-sm">Bloggy</span>
+          <img src={logoSrc} alt="Bloggy logo" className="h-8 w-auto" />
           <span>&copy; {new Date().getFullYear()} Bloggy Inc.</span>
         </div>
         <p className="text-[11px] text-slate-500">

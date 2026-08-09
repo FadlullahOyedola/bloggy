@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import logo from "@/app/logo.png.webp";
 import {
     Bot,
     Sparkles,
@@ -13,6 +14,8 @@ import {
     Users,
     CheckCircle2
 } from "lucide-react";
+
+const logoSrc = typeof logo === "string" ? logo : logo.src;
 
 const AI_AUTHORS = [
     {
@@ -119,24 +122,19 @@ export default function OnboardingAuthorsPage() {
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-purple-900/5 px-6 py-4">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 bg-gradient-to-tr from-[#6D28D9] to-purple-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-purple-500/20">
-                            <Sparkles size={20} />
-                        </div>
-                        <span className="font-serif text-2xl font-black text-[#6D28D9] tracking-tight">
-                            Bloggy
-                        </span>
-                    </div>
+                        <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
 
-                    {/* Step Progress Bar */}
-                    <div className="flex items-center gap-3">
-                        <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:block">
-                            Step 3 of 4
-                        </div>
-                        <div className="flex gap-1.5">
-                            <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                            <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                            <div className="w-8 h-2 bg-[#6D28D9] rounded-full transition-all"></div>
-                            <div className="w-2 h-2 bg-slate-200 rounded-full"></div>
+                        {/* Step Progress Bar */}
+                        <div className="flex items-center gap-3">
+                            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:block">
+                                Step 3 of 4
+                            </div>
+                            <div className="flex gap-1.5">
+                                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                <div className="w-8 h-2 bg-[#6D28D9] rounded-full transition-all"></div>
+                                <div className="w-2 h-2 bg-slate-200 rounded-full"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -203,8 +201,8 @@ export default function OnboardingAuthorsPage() {
                                             type="button"
                                             onClick={() => toggleFollow(author.id)}
                                             className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${isFollowing
-                                                    ? "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200"
-                                                    : "bg-[#6D28D9] text-white shadow-md shadow-purple-500/20 hover:bg-purple-800 scale-105"
+                                                ? "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200"
+                                                : "bg-[#6D28D9] text-white shadow-md shadow-purple-500/20 hover:bg-purple-800 scale-105"
                                                 }`}
                                         >
                                             {isFollowing ? (

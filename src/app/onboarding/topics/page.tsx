@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import logo from "@/app/logo.png.webp";
 import {
     Tag,
     Sparkles,
@@ -12,6 +13,8 @@ import {
     SlidersHorizontal,
     RefreshCw
 } from "lucide-react";
+
+const logoSrc = typeof logo === "string" ? logo : logo.src;
 
 // Full topic categories matching your interest architecture
 const TOPIC_COLLECTIONS = [
@@ -204,12 +207,7 @@ export default function OnboardingTopicsPage() {
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-purple-900/5 px-6 py-4">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 bg-gradient-to-tr from-[#6D28D9] to-purple-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-purple-500/20">
-                            <Sparkles size={20} />
-                        </div>
-                        <span className="font-serif text-2xl font-black text-[#6D28D9] tracking-tight">
-                            Bloggy
-                        </span>
+                        <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -274,8 +272,8 @@ export default function OnboardingTopicsPage() {
                     <div className="pt-2 flex justify-center relative z-10">
                         <div
                             className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all shadow-sm ${isReady
-                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                    : "bg-purple-50 text-[#6D28D9] border border-purple-100"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : "bg-purple-50 text-[#6D28D9] border border-purple-100"
                                 }`}
                         >
                             {isReady ? (
@@ -309,8 +307,8 @@ export default function OnboardingTopicsPage() {
                         type="button"
                         onClick={() => setActiveTab("All")}
                         className={`px-4 py-2.5 rounded-xl whitespace-nowrap transition-all border cursor-pointer ${activeTab === "All"
-                                ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-md shadow-purple-500/20"
-                                : "bg-white text-slate-600 border-purple-900/5 hover:bg-purple-50 hover:text-[#6D28D9]"
+                            ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-md shadow-purple-500/20"
+                            : "bg-white text-slate-600 border-purple-900/5 hover:bg-purple-50 hover:text-[#6D28D9]"
                             }`}
                     >
                         All Categories
@@ -321,8 +319,8 @@ export default function OnboardingTopicsPage() {
                             type="button"
                             onClick={() => setActiveTab(col.name)}
                             className={`px-4 py-2.5 rounded-xl whitespace-nowrap transition-all border cursor-pointer ${activeTab === col.name
-                                    ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-md shadow-purple-500/20"
-                                    : "bg-white text-slate-600 border-purple-900/5 hover:bg-purple-50 hover:text-[#6D28D9]"
+                                ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-md shadow-purple-500/20"
+                                : "bg-white text-slate-600 border-purple-900/5 hover:bg-purple-50 hover:text-[#6D28D9]"
                                 }`}
                         >
                             {col.name}
@@ -360,8 +358,8 @@ export default function OnboardingTopicsPage() {
                                             key={item}
                                             onClick={() => toggleTopic(item)}
                                             className={`px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 border cursor-pointer ${selected
-                                                    ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-md shadow-purple-500/20 scale-105"
-                                                    : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:text-slate-900"
+                                                ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-md shadow-purple-500/20 scale-105"
+                                                : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:text-slate-900"
                                                 }`}
                                         >
                                             <span>{item}</span>
@@ -395,8 +393,8 @@ export default function OnboardingTopicsPage() {
                         onClick={handleNext}
                         disabled={!isReady || loading}
                         className={`w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-sm shadow-xl transition-all duration-300 flex items-center justify-center gap-2 ${isReady
-                                ? "bg-[#6D28D9] hover:bg-purple-800 text-white shadow-purple-500/30 cursor-pointer scale-105"
-                                : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-none"
+                            ? "bg-[#6D28D9] hover:bg-purple-800 text-white shadow-purple-500/30 cursor-pointer scale-105"
+                            : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-none"
                             }`}
                     >
                         {loading ? (

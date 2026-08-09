@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { MailCheck, ArrowRight, RefreshCw, Loader2 } from "lucide-react";
+import logo from "@/app/logo.png.webp";
 
 export default function VerifyEmailPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [resending, setResending] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
+    const logoSrc = typeof logo === "string" ? logo : logo.src;
 
     async function handleVerify() {
         setLoading(true);
@@ -35,9 +37,8 @@ export default function VerifyEmailPage() {
                 {/* Verification Card Column */}
                 <div className="p-8 sm:p-12 flex flex-col justify-between bg-white text-center md:text-left">
                     <div>
-                        <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl text-slate-900">
-                            <span className="w-4 h-4 rounded-full bg-purple-600" />
-                            Bloggy
+                        <Link href="/" className="inline-flex items-center gap-2 no-underline hover:no-underline focus:no-underline">
+                            <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
                         </Link>
 
                         <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center my-6 mx-auto md:mx-0">

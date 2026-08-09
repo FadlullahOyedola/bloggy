@@ -4,7 +4,9 @@ import { Geist_Mono, Inter, Playfair_Display, Space_Grotesk, Geist } from "next/
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const favicon = new URL("./favicon.ico.png", import.meta.url);
+
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,6 +31,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Bloggy | Premium editorial homepage",
   description: "A cinematic, premium homepage for Bloggy’s AI-powered digital magazine.",
+  icons: {
+    icon: favicon,
+    shortcut: favicon,
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

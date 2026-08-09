@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import logo from "@/app/logo.png.webp";
 import {
     Sparkles,
     ArrowRight,
@@ -30,6 +31,7 @@ export default function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const logoSrc = typeof logo === "string" ? logo : logo.src;
 
     const [formData, setFormData] = useState({
         fullName: "",
@@ -80,12 +82,7 @@ export default function RegisterPage() {
             {/* Top Header */}
             <header className="px-6 py-6 max-w-7xl mx-auto w-full flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-2.5 group">
-                    <div className="w-9 h-9 rounded-xl bg-[#6D28D9] flex items-center justify-center text-white font-serif font-black text-xl shadow-md group-hover:bg-[#5B21B6] transition-all">
-                        B
-                    </div>
-                    <span className="font-serif font-bold text-2xl tracking-tight text-slate-900">
-                        Bloggy<span className="text-[#6D28D9]">.</span>
-                    </span>
+                    <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
                 </Link>
 
                 <p className="text-xs font-semibold text-slate-600">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import logo from "@/app/logo.png.webp";
 import {
     Sparkles,
     ArrowRight,
@@ -19,6 +20,7 @@ export default function OnboardingInterestsPage() {
     const [tone, setTone] = useState("casual");
     const [isCompleting, setIsCompleting] = useState(false);
     const [progress, setProgress] = useState(0);
+    const logoSrc = typeof logo === "string" ? logo : logo.src;
 
     const handleFinalize = async () => {
         setIsCompleting(true);
@@ -84,12 +86,7 @@ export default function OnboardingInterestsPage() {
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-purple-900/5 px-6 py-4">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 bg-gradient-to-tr from-[#6D28D9] to-purple-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-purple-500/20">
-                            <Sparkles size={20} />
-                        </div>
-                        <span className="font-serif text-2xl font-black text-[#6D28D9] tracking-tight">
-                            Bloggy
-                        </span>
+                        <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -147,8 +144,8 @@ export default function OnboardingInterestsPage() {
                                     type="button"
                                     onClick={() => setLength(opt.id)}
                                     className={`p-5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${length === opt.id
-                                            ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-lg shadow-purple-500/25 scale-[1.02]"
-                                            : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:shadow-md"
+                                        ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-lg shadow-purple-500/25 scale-[1.02]"
+                                        : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:shadow-md"
                                         }`}
                                 >
                                     <div className="font-extrabold text-sm flex items-center justify-between">
@@ -189,8 +186,8 @@ export default function OnboardingInterestsPage() {
                                     type="button"
                                     onClick={() => setFrequency(opt.id)}
                                     className={`p-5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${frequency === opt.id
-                                            ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-lg shadow-purple-500/25 scale-[1.02]"
-                                            : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:shadow-md"
+                                        ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-lg shadow-purple-500/25 scale-[1.02]"
+                                        : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:shadow-md"
                                         }`}
                                 >
                                     <div className="font-extrabold text-sm flex items-center justify-between">
@@ -231,8 +228,8 @@ export default function OnboardingInterestsPage() {
                                     type="button"
                                     onClick={() => setTone(opt.id)}
                                     className={`p-5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${tone === opt.id
-                                            ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-lg shadow-purple-500/25 scale-[1.02]"
-                                            : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:shadow-md"
+                                        ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-lg shadow-purple-500/25 scale-[1.02]"
+                                        : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300 hover:shadow-md"
                                         }`}
                                 >
                                     <div className="font-extrabold text-sm flex items-center justify-between">

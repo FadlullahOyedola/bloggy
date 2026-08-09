@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Search, Bell, Moon, Sun } from 'lucide-react';
+import logo from '@/app/logo.png.webp';
 
 type Props = {
     isScrolled: boolean;
@@ -12,13 +13,14 @@ type Props = {
 };
 
 export default function Navbar({ isScrolled, isDarkMode, setIsDarkMode, setSearchModalOpen, mobileMenuOpen, setMobileMenuOpen }: Props) {
+    const logoSrc = typeof logo === 'string' ? logo : logo.src;
+
     return (
         <nav id="navbar" className={isScrolled ? 'scrolled' : ''}>
             <div className="container">
                 <div className="nav-inner">
                     <Link href="/" className="nav-logo">
-                        <span className="logo-dot" aria-hidden />
-                        Bloggy
+                        <img src={logoSrc} alt="Bloggy logo" className="h-9 w-auto object-contain" />
                     </Link>
 
                     <div className="nav-links nav-links-desktop">

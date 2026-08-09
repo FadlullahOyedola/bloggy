@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import logo from "@/app/logo.png.webp";
 import {
     Cpu, Briefcase, DollarSign, Heart, Plane, Microscope,
     Palette, Tv, Trophy, Globe, Landmark, Smile, Compass,
     BookOpen, Sparkles, CheckCircle2, ArrowRight, Loader2, Search
 } from "lucide-react";
+
+const logoSrc = typeof logo === "string" ? logo : logo.src;
 
 const INTEREST_GROUPS = [
     {
@@ -275,20 +278,17 @@ export default function OnboardingPage() {
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-purple-900/5 px-6 py-4">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 bg-gradient-to-tr from-[#6D28D9] to-purple-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-purple-500/20">
-                            <Sparkles size={20} />
-                        </div>
-                        <span className="font-serif text-2xl font-black text-[#6D28D9] tracking-tight">Bloggy</span>
-                    </div>
+                        <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
 
-                    {/* Step Progress Pill */}
-                    <div className="flex items-center gap-3">
-                        <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:block">Step 1 of 4</div>
-                        <div className="flex gap-1.5">
-                            <div className="w-8 h-2 bg-[#6D28D9] rounded-full transition-all"></div>
-                            <div className="w-2 h-2 bg-slate-200 rounded-full"></div>
-                            <div className="w-2 h-2 bg-slate-200 rounded-full"></div>
-                            <div className="w-2 h-2 bg-slate-200 rounded-full"></div>
+                        {/* Step Progress Pill */}
+                        <div className="flex items-center gap-3">
+                            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:block">Step 1 of 4</div>
+                            <div className="flex gap-1.5">
+                                <div className="w-8 h-2 bg-[#6D28D9] rounded-full transition-all"></div>
+                                <div className="w-2 h-2 bg-slate-200 rounded-full"></div>
+                                <div className="w-2 h-2 bg-slate-200 rounded-full"></div>
+                                <div className="w-2 h-2 bg-slate-200 rounded-full"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -327,8 +327,8 @@ export default function OnboardingPage() {
                     <div className="pt-2 flex justify-center">
                         <div
                             className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all shadow-sm ${isReady
-                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                    : "bg-purple-50 text-[#6D28D9] border border-purple-100"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : "bg-purple-50 text-[#6D28D9] border border-purple-100"
                                 }`}
                         >
                             {isReady ? (
@@ -414,15 +414,15 @@ export default function OnboardingPage() {
                                                     key={topic}
                                                     onClick={() => toggleInterest(topic)}
                                                     className={`p-4 rounded-2xl text-xs sm:text-sm font-medium text-left transition-all duration-300 flex items-center justify-between border cursor-pointer backdrop-blur-md ${selected
-                                                            ? "bg-[#6D28D9] text-white border-purple-400 shadow-lg shadow-purple-900/50 scale-[1.02]"
-                                                            : "bg-white/15 text-white border-white/20 hover:bg-white/25 hover:border-white/40 hover:scale-[1.01]"
+                                                        ? "bg-[#6D28D9] text-white border-purple-400 shadow-lg shadow-purple-900/50 scale-[1.02]"
+                                                        : "bg-white/15 text-white border-white/20 hover:bg-white/25 hover:border-white/40 hover:scale-[1.01]"
                                                         }`}
                                                 >
                                                     <span className="truncate pr-1 drop-shadow-sm">{topic}</span>
                                                     <div
                                                         className={`w-5 h-5 rounded-full flex items-center shrink-0 justify-center transition-all ${selected
-                                                                ? "bg-white/20 text-white"
-                                                                : "opacity-0 group-hover:opacity-60 text-white/60"
+                                                            ? "bg-white/20 text-white"
+                                                            : "opacity-0 group-hover:opacity-60 text-white/60"
                                                             }`}
                                                     >
                                                         <CheckCircle2 size={14} />
@@ -456,8 +456,8 @@ export default function OnboardingPage() {
                         onClick={handleContinue}
                         disabled={!isReady || loading}
                         className={`w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-sm shadow-xl transition-all duration-300 flex items-center justify-center gap-2 ${isReady
-                                ? "bg-[#6D28D9] hover:bg-purple-800 text-white shadow-purple-500/30 cursor-pointer scale-105"
-                                : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-none"
+                            ? "bg-[#6D28D9] hover:bg-purple-800 text-white shadow-purple-500/30 cursor-pointer scale-105"
+                            : "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-none"
                             }`}
                     >
                         {loading ? (
