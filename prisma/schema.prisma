@@ -90,7 +90,7 @@ model PrivacySettings {
   id                 String   @id @default(cuid())
   userId             String   @unique
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  profileVisibility  String   @default("public")
+  profileVisibility String   @default("public")
   whoCanFollow       String   @default("everyone")
   whoCanComment      String   @default("everyone")
   whoCanMention      String   @default("everyone")
@@ -122,12 +122,13 @@ model SupportTicket {
   priority    TicketPriority @default(normal)
   subject     String
   message     String         @db.Text
+  attachment  String?
   environment String?
   handle      String?
   status      TicketStatus   @default(OPEN)
 
   // Admin Response Field
-  adminResponse String?      @db.Text
+  adminResponse String?   @db.Text
   respondedAt   DateTime?
 
   createdAt DateTime @default(now())

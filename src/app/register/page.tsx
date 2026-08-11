@@ -54,7 +54,7 @@ export default function RegisterPage() {
         setErrorMessage("");
 
         try {
-            const response = await fetch("/api/register", {
+            const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -65,10 +65,10 @@ export default function RegisterPage() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Registration failed. Please try again.");
+                throw new Error(data.error || data.message || "Registration failed. Please try again.");
             }
 
-            // Redirect directly to verify-email route upon success
+            // Redirect directly to verify-email route upon success passing email
             router.push(`/verify-email?email=${encodeURIComponent(formData.email)}`);
         } catch (err: any) {
             setErrorMessage(err.message || "An unexpected error occurred.");

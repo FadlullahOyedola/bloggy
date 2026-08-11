@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import logo from "@/app/logo.png.webp";
@@ -28,6 +28,9 @@ export function GithubLogo() {
 
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const emailParam = searchParams.get("email");
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(true);
@@ -36,13 +39,17 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const logoSrc = typeof logo === "string" ? logo : logo.src;
 
-    // Restore saved email from local storage on mount
+    // Restore saved email from query params or local storage on mount
     useEffect(() => {
-        const savedEmail = localStorage.getItem("bloggy_remembered_email");
-        if (savedEmail) {
-            setEmail(savedEmail);
+        if (emailParam) {
+            setEmail(emailParam);
+        } else {
+            const savedEmail = localStorage.getItem("bloggy_remembered_email");
+            if (savedEmail) {
+                setEmail(savedEmail);
+            }
         }
-    }, []);
+    }, [emailParam]);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -56,33 +63,35 @@ export default function LoginPage() {
             localStorage.removeItem("bloggy_remembered_email");
         }
 
-        const res = await signIn("credentials", {
-            email,
-            password,
-            redirect: false,
-        });
-
-        if (res?.error) {
-            setLoading(false);
-            setError("Invalid email or password");
-            return;
-        }
-
-        // Check onboarding status via profile API endpoint
         try {
+            const res = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setLoading(false);
+                setError(data.error || "Invalid email or password");
+                return;
+            }
+
+            // Check onboarding status via profile API endpoint or proceed to dashboard
             const userRes = await fetch("/api/user/me");
             if (userRes.ok) {
                 const userData = await userRes.json();
                 if (!userData?.hasCompletedOnboarding) {
                     router.push("/onboarding");
                 } else {
-                    router.push("/");
+                    router.push("/dashboard");
                 }
             } else {
-                router.push("/");
+                router.push("/dashboard");
             }
         } catch {
-            router.push("/");
+            router.push("/dashboard");
         } finally {
             router.refresh();
         }
@@ -190,16 +199,17 @@ export default function LoginPage() {
                                 </div>
                             </div>
 
-                            {/* Remember Me Checkbox */}
-                            <div className="flex items-center justify-between pt-1">
-                                <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={rememberMe}
-                                        onChange={(e) => setRememberMe(e.target.checked)}
-                                        className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-600 accent-purple-600 cursor-pointer"
-                                    />
-                                    <span>Remember my email</span>
+                            {/* Remember Me */}
+                            <div className="flex items-center gap-2 pt-1">
+                                <input
+                                    type="checkbox"
+                                    id="rememberMe"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-600 accent-purple-600 cursor-pointer"
+                                />
+                                <label htmlFor="rememberMe" className="text-xs text-slate-600 cursor-pointer">
+                                    Remember this device
                                 </label>
                             </div>
 
@@ -207,33 +217,42 @@ export default function LoginPage() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-bold text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20 mt-2 cursor-pointer"
+                                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
                             >
-                                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Sign In</span>}
-                                <ArrowRight className="w-4 h-4" />
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        <span>Signing in...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>Sign In</span>
+                                        <ArrowRight className="w-4 h-4" />
+                                    </>
+                                )}
                             </button>
                         </form>
                     </div>
 
-                    <p className="text-center text-xs text-slate-500 mt-8">
+                    <p className="text-xs text-slate-500 mt-8">
                         Don't have an account?{" "}
-                        <Link href="/register" className="font-bold text-purple-600 hover:underline">
-                            Create an account
+                        <Link href="/register" className="text-purple-600 font-bold hover:underline">
+                            Sign up
                         </Link>
                     </p>
                 </div>
 
-                {/* Right Showcase Column with Image */}
+                {/* Right Showcase Column */}
                 <div className="hidden md:block relative bg-slate-900 min-h-[500px]">
                     <img
-                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop"
-                        alt="Writer portrait"
-                        className="absolute inset-0 w-full h-full object-cover opacity-90"
+                        src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop"
+                        alt="Blogging workstation"
+                        className="absolute inset-0 w-full h-full object-cover opacity-80"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex flex-col justify-end p-8 sm:p-10 text-white">
-                        <span className="text-[10px] uppercase font-bold tracking-widest text-purple-300">Bloggy Creators</span>
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-purple-300">Welcome Back</span>
                         <p className="text-xl font-serif font-bold leading-snug mt-1">
-                            "Bloggy gives me total creative control and a direct line to my readers without algorithmic interference."
+                            "Your ideas belong in front of people who care."
                         </p>
                     </div>
                 </div>

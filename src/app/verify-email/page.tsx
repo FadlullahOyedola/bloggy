@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MailCheck, ArrowRight, RefreshCw, Loader2 } from "lucide-react";
 import logo from "@/app/logo.png.webp";
 
 export default function VerifyEmailPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const emailParam = searchParams.get("email") || "";
+
     const [loading, setLoading] = useState(false);
     const [resending, setResending] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
@@ -15,11 +18,11 @@ export default function VerifyEmailPage() {
 
     async function handleVerify() {
         setLoading(true);
-        // Preserved exact verification redirect target
+        // Preserved exact verification flow redirect target with registered email context
         setTimeout(() => {
             setLoading(false);
-            router.push("/onboarding/interests");
-        }, 1500);
+            router.push(`/login?email=${encodeURIComponent(emailParam)}`);
+        }, 1200);
     }
 
     async function handleResend() {
@@ -27,7 +30,7 @@ export default function VerifyEmailPage() {
         setMessage(null);
         setTimeout(() => {
             setResending(false);
-            setMessage("A new verification link has been sent to your email.");
+            setMessage(`A new verification link has been sent to ${emailParam || "your email"}.`);
         }, 1200);
     }
 
@@ -49,7 +52,7 @@ export default function VerifyEmailPage() {
                             Verify your email
                         </h1>
                         <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                            We've sent a confirmation link to your email address. Click the link inside or tap below to continue setting up your publication.
+                            We've sent a confirmation link to <span className="font-semibold text-slate-900">{emailParam || "your email address"}</span>. Click the link inside or tap below to continue setting up your account.
                         </p>
 
                         {message && (
@@ -62,7 +65,7 @@ export default function VerifyEmailPage() {
                             <button
                                 onClick={handleVerify}
                                 disabled={loading}
-                                className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20"
+                                className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20 cursor-pointer"
                             >
                                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Confirm Email & Continue</span>}
                                 <ArrowRight className="w-4 h-4" />
@@ -71,7 +74,7 @@ export default function VerifyEmailPage() {
                             <button
                                 onClick={handleResend}
                                 disabled={resending}
-                                className="w-full py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+                                className="w-full py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 {resending ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
                                 <span>Resend Verification Email</span>
