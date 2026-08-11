@@ -357,8 +357,8 @@ export default function AdvancedContactPage() {
                                                     key={cat.id}
                                                     onClick={() => setSelectedCategory(cat.id)}
                                                     className={`p-3 rounded-2xl border text-left transition-all flex items-start gap-3 cursor-pointer ${isSelected
-                                                            ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-md shadow-purple-500/20"
-                                                            : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300"
+                                                        ? "bg-[#6D28D9] text-white border-[#6D28D9] shadow-md shadow-purple-500/20"
+                                                        : "bg-[#F8F7FC] text-slate-700 border-purple-900/5 hover:bg-white hover:border-purple-300"
                                                         }`}
                                                 >
                                                     <Icon size={18} className={`shrink-0 mt-0.5 ${isSelected ? "text-white" : "text-[#6D28D9]"}`} />
