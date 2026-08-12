@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import logo from "@/app/logo.png.webp";
@@ -28,8 +28,6 @@ export function GithubLogo() {
 
 export default function LoginClient() {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const emailParam = searchParams.get("email");
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -40,6 +38,9 @@ export default function LoginClient() {
     const logoSrc = typeof logo === "string" ? logo : logo.src;
 
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const emailParam = params.get("email");
+
         if (emailParam) {
             setEmail(emailParam);
         } else {
@@ -48,7 +49,7 @@ export default function LoginClient() {
                 setEmail(savedEmail);
             }
         }
-    }, [emailParam]);
+    }, []);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();

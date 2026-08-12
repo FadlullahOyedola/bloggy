@@ -3,6 +3,7 @@ import { Loader2 } from "lucide-react";
 import LoginClient from "./login-client";
 
 export const dynamic = "force-dynamic";
+export const dynamicParams = true;
 
 export default function LoginPage() {
     return (
