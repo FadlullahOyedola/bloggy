@@ -1,9 +1,9 @@
-"use client";
-
 export const dynamic = "force-dynamic";
 
+"use client";
+
 import { useState, useEffect, Suspense } from "react";
-import { signIn } from "next-auth/react";;
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
@@ -41,7 +41,6 @@ function LoginFormContent() {
     const [showPassword, setShowPassword] = useState(false);
     const logoSrc = typeof logo === "string" ? logo : logo.src;
 
-    // Restore saved email from query params or local storage on mount
     useEffect(() => {
         if (emailParam) {
             setEmail(emailParam);
@@ -58,7 +57,6 @@ function LoginFormContent() {
         setError(null);
         setLoading(true);
 
-        // Save or clear remembered email
         if (rememberMe) {
             localStorage.setItem("bloggy_remembered_email", email);
         } else {
@@ -80,7 +78,6 @@ function LoginFormContent() {
                 return;
             }
 
-            // Check onboarding status via profile API endpoint or proceed to dashboard
             const userRes = await fetch("/api/user/me");
             if (userRes.ok) {
                 const userData = await userRes.json();
@@ -101,7 +98,6 @@ function LoginFormContent() {
 
     return (
         <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
-            {/* Left Form Column */}
             <div className="p-8 sm:p-12 flex flex-col justify-between bg-white">
                 <div>
                     <Link href="/" className="inline-flex items-center gap-2">
@@ -147,7 +143,6 @@ function LoginFormContent() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        {/* Email Input */}
                         <div>
                             <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                                 Email Address
@@ -166,7 +161,6 @@ function LoginFormContent() {
                             </div>
                         </div>
 
-                        {/* Password Input */}
                         <div>
                             <div className="flex items-center justify-between mb-1.5">
                                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
@@ -200,7 +194,6 @@ function LoginFormContent() {
                             </div>
                         </div>
 
-                        {/* Remember Me */}
                         <div className="flex items-center gap-2 pt-1">
                             <input
                                 type="checkbox"
@@ -214,7 +207,6 @@ function LoginFormContent() {
                             </label>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={loading}
@@ -243,7 +235,6 @@ function LoginFormContent() {
                 </p>
             </div>
 
-            {/* Right Showcase Column */}
             <div className="hidden md:block relative bg-slate-900 min-h-[500px]">
                 <img
                     src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop"
