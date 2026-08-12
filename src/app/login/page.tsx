@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export function GithubLogo() {
     );
 }
 
-export default function LoginPage() {
+function LoginFormContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const emailParam = searchParams.get("email");
@@ -98,165 +98,177 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-slate-100 p-4 sm:p-6 lg:p-8 font-sans">
-            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
-                {/* Left Form Column */}
-                <div className="p-8 sm:p-12 flex flex-col justify-between bg-white">
-                    <div>
-                        <Link href="/" className="inline-flex items-center gap-2">
-                            <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
-                        </Link>
+        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
+            {/* Left Form Column */}
+            <div className="p-8 sm:p-12 flex flex-col justify-between bg-white">
+                <div>
+                    <Link href="/" className="inline-flex items-center gap-2">
+                        <img src={logoSrc} alt="Bloggy logo" className="h-10 w-auto" />
+                    </Link>
 
-                        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 mt-8">
-                            Welcome Back
-                        </h1>
-                        <p className="text-xs text-slate-500 mt-1">
-                            Sign in to access your publications, drafts, and subscriber stats.
-                        </p>
+                    <h1 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 mt-8">
+                        Welcome Back
+                    </h1>
+                    <p className="text-xs text-slate-500 mt-1">
+                        Sign in to access your publications, drafts, and subscriber stats.
+                    </p>
 
-                        {error && (
-                            <div className="mt-4 p-3 text-xs rounded-xl bg-red-50 text-red-600 border border-red-200 font-medium">
-                                {error}
-                            </div>
-                        )}
-
-                        <div className="mt-6 grid grid-cols-2 gap-3">
-                            <button
-                                type="button"
-                                onClick={() => signIn("google", { callbackUrl: "/onboarding" })}
-                                className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
-                            >
-                                <GoogleLogo />
-                                <span>Google</span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => signIn("github", { callbackUrl: "/onboarding" })}
-                                className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
-                            >
-                                <GithubLogo />
-                                <span>GitHub</span>
-                            </button>
+                    {error && (
+                        <div className="mt-4 p-3 text-xs rounded-xl bg-red-50 text-red-600 border border-red-200 font-medium">
+                            {error}
                         </div>
+                    )}
 
-                        <div className="my-6 flex items-center gap-3">
-                            <div className="h-px bg-slate-200 flex-1" />
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Or continue with</span>
-                            <div className="h-px bg-slate-200 flex-1" />
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Email Input */}
-                            <div>
-                                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                                    Email Address
-                                </label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                                    <input
-                                        name="email"
-                                        type="email"
-                                        required
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="name@example.com"
-                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 text-slate-900 focus:bg-white focus:outline-none focus:border-purple-600 transition-colors"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Password Input */}
-                            <div>
-                                <div className="flex items-center justify-between mb-1.5">
-                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
-                                        Password
-                                    </label>
-                                    <Link
-                                        href="/forgot-password"
-                                        className="text-[11px] font-semibold text-purple-600 hover:underline"
-                                    >
-                                        Forgot password?
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Lock className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                                    <input
-                                        name="password"
-                                        type={showPassword ? "text" : "password"}
-                                        required
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        placeholder="••••••••"
-                                        className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 text-slate-900 focus:bg-white focus:outline-none focus:border-purple-600 transition-colors"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 cursor-pointer"
-                                    >
-                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Remember Me */}
-                            <div className="flex items-center gap-2 pt-1">
-                                <input
-                                    type="checkbox"
-                                    id="rememberMe"
-                                    checked={rememberMe}
-                                    onChange={(e) => setRememberMe(e.target.checked)}
-                                    className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-600 accent-purple-600 cursor-pointer"
-                                />
-                                <label htmlFor="rememberMe" className="text-xs text-slate-600 cursor-pointer">
-                                    Remember this device
-                                </label>
-                            </div>
-
-                            {/* Submit Button */}
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
-                            >
-                                {loading ? (
-                                    <>
-                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                        <span>Signing in...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <span>Sign In</span>
-                                        <ArrowRight className="w-4 h-4" />
-                                    </>
-                                )}
-                            </button>
-                        </form>
+                    <div className="mt-6 grid grid-cols-2 gap-3">
+                        <button
+                            type="button"
+                            onClick={() => signIn("google", { callbackUrl: "/onboarding" })}
+                            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                        >
+                            <GoogleLogo />
+                            <span>Google</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => signIn("github", { callbackUrl: "/onboarding" })}
+                            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                        >
+                            <GithubLogo />
+                            <span>GitHub</span>
+                        </button>
                     </div>
 
-                    <p className="text-xs text-slate-500 mt-8">
-                        Don't have an account?{" "}
-                        <Link href="/register" className="text-purple-600 font-bold hover:underline">
-                            Sign up
-                        </Link>
+                    <div className="my-6 flex items-center gap-3">
+                        <div className="h-px bg-slate-200 flex-1" />
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Or continue with</span>
+                        <div className="h-px bg-slate-200 flex-1" />
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        {/* Email Input */}
+                        <div>
+                            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                                Email Address
+                            </label>
+                            <div className="relative">
+                                <Mail className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                                <input
+                                    name="email"
+                                    type="email"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="name@example.com"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 text-slate-900 focus:bg-white focus:outline-none focus:border-purple-600 transition-colors"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Password Input */}
+                        <div>
+                            <div className="flex items-center justify-between mb-1.5">
+                                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                                    Password
+                                </label>
+                                <Link
+                                    href="/forgot-password"
+                                    className="text-[11px] font-semibold text-purple-600 hover:underline"
+                                >
+                                    Forgot password?
+                                </Link>
+                            </div>
+                            <div className="relative">
+                                <Lock className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                                <input
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="••••••••"
+                                    className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 text-slate-900 focus:bg-white focus:outline-none focus:border-purple-600 transition-colors"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 cursor-pointer"
+                                >
+                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Remember Me */}
+                        <div className="flex items-center gap-2 pt-1">
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                                className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-600 accent-purple-600 cursor-pointer"
+                            />
+                            <label htmlFor="rememberMe" className="text-xs text-slate-600 cursor-pointer">
+                                Remember this device
+                            </label>
+                        </div>
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span>Signing in...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span>Sign In</span>
+                                    <ArrowRight className="w-4 h-4" />
+                                </>
+                            )}
+                        </button>
+                    </form>
+                </div>
+
+                <p className="text-xs text-slate-500 mt-8">
+                    Don't have an account?{" "}
+                    <Link href="/register" className="text-purple-600 font-bold hover:underline">
+                        Sign up
+                    </Link>
+                </p>
+            </div>
+
+            {/* Right Showcase Column */}
+            <div className="hidden md:block relative bg-slate-900 min-h-[500px]">
+                <img
+                    src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop"
+                    alt="Blogging workstation"
+                    className="absolute inset-0 w-full h-full object-cover opacity-80"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex flex-col justify-end p-8 sm:p-10 text-white">
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-purple-300">Welcome Back</span>
+                    <p className="text-xl font-serif font-bold leading-snug mt-1">
+                        &quot;Your ideas belong in front of people who care.&quot;
                     </p>
                 </div>
-
-                {/* Right Showcase Column */}
-                <div className="hidden md:block relative bg-slate-900 min-h-[500px]">
-                    <img
-                        src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop"
-                        alt="Blogging workstation"
-                        className="absolute inset-0 w-full h-full object-cover opacity-80"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex flex-col justify-end p-8 sm:p-10 text-white">
-                        <span className="text-[10px] uppercase font-bold tracking-widest text-purple-300">Welcome Back</span>
-                        <p className="text-xl font-serif font-bold leading-snug mt-1">
-                            "Your ideas belong in front of people who care."
-                        </p>
-                    </div>
-                </div>
             </div>
+        </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <div className="min-h-screen w-full flex items-center justify-center bg-slate-100 p-4 sm:p-6 lg:p-8 font-sans">
+            <Suspense fallback={
+                <div className="flex items-center justify-center p-12">
+                    <Loader2 className="w-8 h-8 text-purple-600 animate-spin" />
+                </div>
+            }>
+                <LoginFormContent />
+            </Suspense>
         </div>
     );
 }
