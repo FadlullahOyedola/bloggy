@@ -3,7 +3,11 @@ import { Loader2 } from "lucide-react";
 import LoginClient from "./login-client";
 
 export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+
+// This forces Next.js to skip static generation prerendering for this route entirely
+export function generateStaticParams() {
+    return [];
+}
 
 export default function LoginPage() {
     return (
